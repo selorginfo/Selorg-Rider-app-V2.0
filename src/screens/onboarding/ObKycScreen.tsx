@@ -8,7 +8,6 @@ import {ChevronRightIcon} from '../../components/common/Icons';
 import {PrimaryButton} from '../../components/buttons/PrimaryButton';
 import {useAppNavigation} from '../../hooks/useAppNavigation';
 import {useRider} from '../../store/RiderContext';
-import {obDocsCount} from '../../store/selectors';
 import {DOC_LIST, TWO_SIDED_DOC_CODES} from '../../mock';
 import {
   profileApi,
@@ -31,14 +30,16 @@ function slotKey(code: string, side: SlotSide): string {
   return `${code}:${side}`;
 }
 
-function isCompleteStatus(status: DocUiStatus): boolean {
-  return status === 'pending' || status === 'approved';
-}
-
 function mapServerStatus(
   raw: string | undefined,
   partial: boolean,
 ): DocUiStatus {
+  // Partial (one of two required sides) must win over a generic pending/missing
+  // flag from onboarding state — otherwise Continue unlocks too early or the
+  // wrong subtitle is shown.
+  if (partial) {
+    return 'partial';
+  }
   const s = (raw || 'missing').toLowerCase();
   if (s === 'approved' || s === 'verified') {
     return 'approved';
@@ -48,9 +49,6 @@ function mapServerStatus(
   }
   if (s === 'rejected') {
     return 'rejected';
-  }
-  if (partial) {
-    return 'partial';
   }
   return 'missing';
 }
@@ -64,10 +62,28 @@ function findDocRow(
   if (side === 'file') {
     return rows[0];
   }
-  return (
-    rows.find(d => d.side === side) ||
-    (side === 'front' ? rows.find(d => !d.side) : undefined)
-  );
+  const normalized = rows.map(d => ({
+    row: d,
+    side: (d.side || 'front') as KycDocumentSide,
+  }));
+  return normalized.find(d => d.side === side)?.row;
+}
+
+function isDocSlotsComplete(
+  code: string,
+  slotUris: Record<string, string>,
+  status: DocUiStatus,
+): boolean {
+  if (status === 'rejected') {
+    return false;
+  }
+  if (isTwoSided(code)) {
+    return (
+      Boolean(slotUris[slotKey(code, 'front')]) &&
+      Boolean(slotUris[slotKey(code, 'back')])
+    );
+  }
+  return Boolean(slotUris[slotKey(code, 'file')]);
 }
 
 function rowSub(
@@ -114,8 +130,10 @@ export function ObKycScreen() {
   const [slotUris, setSlotUris] = useState<Record<string, string>>({});
   const [error, setError] = useState('');
 
-  const count = obDocsCount(state);
-  const allDone = count === DOC_LIST.length;
+  const count = DOC_LIST.filter(d =>
+    isDocSlotsComplete(d.code, slotUris, docStatus[d.code] || 'missing'),
+  ).length;
+  const allDone = count === DOC_LIST.length && !syncing;
 
   const syncFromServer = useCallback(async () => {
     setError('');
@@ -153,10 +171,13 @@ export function ObKycScreen() {
         : undefined;
       const hasFront = Boolean(nextUris[slotKey(d.code, 'front')]);
       const hasBack = Boolean(nextUris[slotKey(d.code, 'back')]);
+      const hasFile = Boolean(nextUris[slotKey(d.code, 'file')]);
       const partial = isTwoSided(d.code) && hasFront !== hasBack;
       const status = mapServerStatus(row?.status, partial);
       nextStatus[d.code] = status;
-      nextDone[d.code] = isCompleteStatus(status);
+      nextDone[d.code] = isTwoSided(d.code)
+        ? hasFront && hasBack && status !== 'rejected'
+        : hasFile && status !== 'rejected';
     }
 
     const docsStep = stateResult.data?.steps?.find(s => s.key === 'documents');
@@ -226,7 +247,7 @@ export function ObKycScreen() {
             const status =
               docStatus[d.code] ||
               (state.obDocs[d.code] ? 'pending' : 'missing');
-            const done = isCompleteStatus(status);
+            const done = isDocSlotsComplete(d.code, slotUris, status);
             const partial = status === 'partial';
 
             return (
@@ -261,7 +282,11 @@ export function ObKycScreen() {
                 />
                 <View style={styles.text}>
                   <AppText style={styles.label}>{d.label}</AppText>
-                  <AppText style={styles.sub}>
+                  <AppText
+                    style={[
+                      styles.sub,
+                      partial ? styles.subWarn : null,
+                    ]}>
                     {rowSub(status, d.code, slotUris, d.sub)}
                   </AppText>
                 </View>
@@ -330,6 +355,7 @@ const styles = StyleSheet.create({
   text: {flex: 1},
   label: {fontWeight: '700', fontSize: 13, color: colors.ink},
   sub: {fontWeight: '400', fontSize: 11, color: colors.textMuted, marginTop: 2},
+  subWarn: {color: colors.danger, fontWeight: '600'},
   badge: {
     borderRadius: 999,
     paddingVertical: 5,

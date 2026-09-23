@@ -175,15 +175,28 @@ export function reducer(state: RiderState, action: Action): RiderState {
       };
 
     case 'TOGGLE_ONLINE_OFF':
-      return {...state, isOnline: false, activeShiftId: null};
+      return {
+        ...state,
+        isOnline: false,
+        activeShiftId: null,
+        activeShiftTime: null,
+        onlineSince: null,
+      };
 
-    case 'START_SHIFT':
+    case 'START_SHIFT': {
+      const shiftId = state.pickedShiftId || state.activeShiftId || null;
+      const slot = shiftId
+        ? state.shifts.find(s => s.id === shiftId)
+        : undefined;
       return {
         ...state,
         isOnline: true,
-        activeShiftId: state.pickedShiftId || state.activeShiftId || null,
+        activeShiftId: shiftId,
+        activeShiftTime: slot?.time || state.activeShiftTime || null,
+        onlineSince: state.onlineSince || new Date().toISOString(),
         shiftSheetOpen: false,
       };
+    }
 
     case 'TOGGLE_BULK_BAG':
       return {

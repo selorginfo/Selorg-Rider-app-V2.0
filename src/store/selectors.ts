@@ -39,19 +39,20 @@ export const FLOW_LABELS: Record<string, string> = {
 
 export const activeShiftLabel = (s: RiderState): string => {
   if (!s.isOnline) {
-    return 'Offline · tap to go online';
-  }
-  const hub = s.epHubName || s.epHubId;
-  if (hub && s.onlineSince) {
-    return `${hub} · online`;
-  }
-  if (hub) {
-    return hub;
+    return 'Not working · tap to go online';
   }
   const slot =
-    s.shifts.find(x => x.id === s.activeShiftId) ||
-    s.shifts.find(x => x.id === s.pickedShiftId);
-  return slot?.time || 'Online';
+    s.activeShiftTime ||
+    s.shifts.find(x => x.id === s.activeShiftId)?.time ||
+    s.shifts.find(x => x.id === s.pickedShiftId)?.time;
+  if (slot) {
+    return slot;
+  }
+  const hub = s.epHubName || s.epHubId;
+  if (hub) {
+    return `${hub} · online`;
+  }
+  return 'Online';
 };
 
 export function onlineDurationLabel(onlineSince?: string | null): string {

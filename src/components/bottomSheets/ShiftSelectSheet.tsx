@@ -6,10 +6,15 @@ import {SheetHeading} from './SheetHeading';
 import {RadioDot} from '../inputs/RadioDot';
 import {PrimaryButton} from '../buttons/PrimaryButton';
 import {useRider} from '../../store/RiderContext';
+import {isSlotBooked} from '../../store/selectors';
 import {riderApi} from '../../services/api/riderApi';
+import {enableAndReadGps} from '../../services/location/locationTracker';
 import {colors, radius} from '../../theme';
 
-/** Home → shift picker, or 24h go-online when no slots are published. */
+/**
+ * Home online toggle → pick a published shift, book if needed, then start.
+ * Rider stays offline until Start Working succeeds against the backend.
+ */
 export function ShiftSelectSheet() {
   const {state, actions} = useRider();
   const [loading, setLoading] = useState(false);
@@ -25,9 +30,52 @@ export function ShiftSelectSheet() {
     (async () => {
       setLoading(true);
       try {
-        const shifts = await riderApi.getShifts();
+        const [available, mine] = await Promise.all([
+          riderApi.getShifts(),
+          riderApi.getMyShifts().catch(() => ({ok: false as const, data: null})),
+        ]);
+        let shifts = available;
+        if (mine.ok && mine.data) {
+          const rows = Array.isArray(mine.data)
+            ? mine.data
+            : Array.isArray((mine.data as {shifts?: unknown[]}).shifts)
+              ? (mine.data as {shifts: unknown[]}).shifts
+              : [];
+          const bookedIds = new Set(
+            rows
+              .map(row => {
+                if (!row || typeof row !== 'object') {
+                  return '';
+                }
+                const r = row as {shiftId?: unknown; id?: unknown; _id?: unknown};
+                if (typeof r.shiftId === 'string') {
+                  return r.shiftId;
+                }
+                if (r.shiftId && typeof r.shiftId === 'object') {
+                  const p = r.shiftId as {id?: unknown; _id?: unknown};
+                  return String(p.id || p._id || '');
+                }
+                return String(r.id || r._id || '');
+              })
+              .filter(Boolean),
+          );
+          if (bookedIds.size > 0) {
+            shifts = available.map(s =>
+              bookedIds.has(s.id) ? {...s, booked: true} : s,
+            );
+          }
+        }
         if (!cancelled) {
-          actions.patch({shifts});
+          const bookedFirst =
+            shifts.find(sl => sl.booked)?.id || shifts[0]?.id || null;
+          actions.patch({
+            shifts,
+            pickedShiftId:
+              state.pickedShiftId &&
+              shifts.some(s => s.id === state.pickedShiftId)
+                ? state.pickedShiftId
+                : bookedFirst,
+          });
         }
       } catch {
         if (!cancelled) {
@@ -42,41 +90,54 @@ export function ShiftSelectSheet() {
     return () => {
       cancelled = true;
     };
+    // Only reload when the sheet opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.shiftSheetOpen, actions]);
 
-  async function handleStartShift() {
-    if (!state.pickedShiftId) {
+  async function handleStartWorking() {
+    const shiftId = state.pickedShiftId;
+    if (!shiftId) {
       return;
     }
     setStarting(true);
     setError('');
     try {
-      const result = await riderApi.startShift(state.pickedShiftId);
-      if (result.ok) {
-        actions.startShift();
-        actions.closeShiftSheet();
-      } else {
-        setError(result.error || 'Could not start shift');
+      if (!isSlotBooked(state, shiftId)) {
+        const booked = await riderApi.bookShift(shiftId, true);
+        if (!booked.ok) {
+          setError(booked.error || 'Could not book this shift');
+          return;
+        }
+        actions.patch({
+          booked: {...state.booked, [shiftId]: true},
+          shifts: state.shifts.map(sl =>
+            sl.id === shiftId ? {...sl, booked: true} : sl,
+          ),
+        });
       }
+
+      let location: {latitude: number; longitude: number} | undefined;
+      try {
+        const point = await enableAndReadGps();
+        location = {latitude: point.latitude, longitude: point.longitude};
+      } catch {
+        // GPS optional — backend skips geofence when omitted.
+      }
+
+      const result = await riderApi.startShift(shiftId, location);
+      if (!result.ok) {
+        setError(result.error || 'Could not start shift');
+        return;
+      }
+      const slot = state.shifts.find(sl => sl.id === shiftId);
+      actions.startShift({
+        shiftId: result.data?.shiftId || shiftId,
+        startedAt: result.data?.startedAt || new Date().toISOString(),
+        timeDisplay:
+          result.data?.shift?.timeDisplay || slot?.time || null,
+      });
     } catch {
       setError('Could not start shift');
-    } finally {
-      setStarting(false);
-    }
-  }
-
-  async function handleGoOnline() {
-    setStarting(true);
-    setError('');
-    try {
-      const result = await actions.goOnline();
-      if (result.ok) {
-        actions.closeShiftSheet();
-      } else {
-        setError(result.error || 'Could not go online');
-      }
-    } catch {
-      setError('Could not go online');
     } finally {
       setStarting(false);
     }
@@ -89,10 +150,10 @@ export function ShiftSelectSheet() {
       visible={state.shiftSheetOpen}
       onClose={actions.closeShiftSheet}>
       <SheetHeading
-        title={noShifts ? 'Go online' : 'Select a shift to start'}
+        title="Select a shift to start"
         subtitle={
           noShifts
-            ? 'You can go online any time — 24 hour availability'
+            ? 'No published shifts right now. Book a slot first, then try again.'
             : "Pick the slot you're working now to go online"
         }
       />
@@ -102,7 +163,8 @@ export function ShiftSelectSheet() {
         </View>
       ) : noShifts ? (
         <AppText style={styles.empty}>
-          No published shifts right now. Tap below to start taking orders.
+          No shifts available. Open Book More Slots on Home to schedule a
+          shift, then turn the toggle on again.
         </AppText>
       ) : (
         <View style={styles.list}>
@@ -131,9 +193,9 @@ export function ShiftSelectSheet() {
       )}
       {!!error && <AppText style={styles.error}>{error}</AppText>}
       <PrimaryButton
-        label={noShifts ? 'Go Online' : 'Start Working'}
-        onPress={noShifts ? handleGoOnline : handleStartShift}
-        disabled={(!noShifts && !state.pickedShiftId) || starting || loading}
+        label="Start Working"
+        onPress={handleStartWorking}
+        disabled={noShifts || !state.pickedShiftId || starting || loading}
         height={52}
         borderRadius={radius.lg}
         style={styles.cta}

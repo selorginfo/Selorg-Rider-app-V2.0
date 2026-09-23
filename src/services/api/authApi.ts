@@ -26,10 +26,18 @@ export type SendOtpData = {
   deliveryStatus?: 'sent' | 'failed';
 };
 
+export type CheckAccountData = {
+  exists?: boolean;
+  canLogin?: boolean;
+  next?: 'OTP' | 'CREATE_ACCOUNT' | 'LOGIN';
+  message?: string;
+  phoneRegistered?: boolean;
+  emailRegistered?: boolean;
+};
+
 /**
  * Backend must never return a usable OTP to the client. Strip it if present.
- * Treat deliveryStatus === 'failed' as a hard send failure (parity with
- * Customer Web warnIfUndelivered, but Rider blocks navigation).
+ * Treat deliveryStatus === 'failed' as a hard send failure.
  */
 function normalizeSendOtpResult(
   result: ApiResult<SendOtpData>,
@@ -66,29 +74,71 @@ function normalizeSendOtpResult(
 }
 
 export interface AuthApi {
+  checkAccount(
+    method: LoginMethod,
+    target: string,
+  ): Promise<ApiResult<CheckAccountData>>;
+  checkRegistration(
+    phone: string,
+    email: string,
+  ): Promise<ApiResult<CheckAccountData>>;
   sendOtp(method: LoginMethod, target: string): Promise<ApiResult<SendOtpData>>;
   resendOtp(
     method: LoginMethod,
     target: string,
   ): Promise<ApiResult<SendOtpData>>;
+  sendRegistrationOtp(
+    phone: string,
+    email: string,
+  ): Promise<ApiResult<SendOtpData>>;
+  resendRegistrationOtp(
+    phone: string,
+    email: string,
+  ): Promise<ApiResult<SendOtpData>>;
   verifyOtp(
     method: LoginMethod,
     target: string,
     otp: string,
-    intent?: 'login' | 'signup' | null,
+  ): Promise<ApiResult<VerifyOtpData>>;
+  verifyRegistrationOtp(
+    phone: string,
+    email: string,
+    otp: string,
   ): Promise<ApiResult<VerifyOtpData>>;
   refresh(): Promise<ApiResult<RefreshTokenData>>;
   logout(): Promise<ApiResult<{loggedOut: boolean}>>;
 }
 
 export const authApi: AuthApi = {
+  async checkAccount(method, target) {
+    const normalized = normalizeTarget(method, target);
+    const loginType =
+      method === 'email' || isEmail(normalized) ? 'email' : 'phone';
+    return request<CheckAccountData>('/picker/auth/check-account', {
+      method: 'POST',
+      body: JSON.stringify({loginType, value: normalized}),
+      skipAuth: true,
+    });
+  },
+
+  async checkRegistration(phone, email) {
+    return request<CheckAccountData>('/picker/auth/check-registration', {
+      method: 'POST',
+      body: JSON.stringify({
+        phone: phone.replace(/\D/g, '').slice(-10),
+        email: email.trim().toLowerCase(),
+      }),
+      skipAuth: true,
+    });
+  },
+
   async sendOtp(method, target) {
     const normalized = normalizeTarget(method, target);
     const result =
       method === 'email' || isEmail(normalized)
         ? await request<SendOtpData>('/picker/auth/send-otp-email', {
             method: 'POST',
-            body: JSON.stringify({email: normalized}),
+            body: JSON.stringify({email: normalized, purpose: 'LOGIN'}),
             skipAuth: true,
           })
         : await request<SendOtpData>('/picker/auth/send-otp', {
@@ -96,6 +146,7 @@ export const authApi: AuthApi = {
             body: JSON.stringify({
               phone: normalized,
               preferredChannel: method === 'whatsapp' ? 'whatsapp' : 'sms',
+              purpose: 'LOGIN',
             }),
             skipAuth: true,
           });
@@ -108,7 +159,7 @@ export const authApi: AuthApi = {
       method === 'email' || isEmail(normalized)
         ? await request<SendOtpData>('/picker/auth/resend-otp-email', {
             method: 'POST',
-            body: JSON.stringify({email: normalized}),
+            body: JSON.stringify({email: normalized, purpose: 'LOGIN'}),
             skipAuth: true,
           })
         : await request<SendOtpData>('/picker/auth/resend-otp', {
@@ -116,25 +167,58 @@ export const authApi: AuthApi = {
             body: JSON.stringify({
               phone: normalized,
               preferredChannel: method === 'whatsapp' ? 'whatsapp' : 'sms',
+              purpose: 'LOGIN',
             }),
             skipAuth: true,
           });
     return normalizeSendOtpResult(result);
   },
 
-  async verifyOtp(method, target, otp, intent) {
+  async sendRegistrationOtp(phone, email) {
+    const result = await request<SendOtpData>(
+      '/picker/auth/send-registration-otp',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          phone: phone.replace(/\D/g, '').slice(-10),
+          email: email.trim().toLowerCase(),
+        }),
+        skipAuth: true,
+      },
+    );
+    return normalizeSendOtpResult(result);
+  },
+
+  async resendRegistrationOtp(phone, email) {
+    const result = await request<SendOtpData>(
+      '/picker/auth/resend-registration-otp',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          phone: phone.replace(/\D/g, '').slice(-10),
+          email: email.trim().toLowerCase(),
+        }),
+        skipAuth: true,
+      },
+    );
+    return normalizeSendOtpResult(result);
+  },
+
+  async verifyOtp(method, target, otp) {
     const body =
       method === 'email' || isEmail(target)
         ? {
             email: normalizeTarget(method, target),
             otp,
-            intent: intent || undefined,
+            purpose: 'LOGIN',
+            intent: 'login',
           }
         : {
             phone: normalizeTarget(method, target),
             otp,
             preferredChannel: method === 'whatsapp' ? 'whatsapp' : 'sms',
-            intent: intent || undefined,
+            purpose: 'LOGIN',
+            intent: 'login',
           };
 
     const path =
@@ -149,6 +233,56 @@ export const authApi: AuthApi = {
     });
 
     if (result.ok && result.data?.token) {
+      if (result.data.user?.workforceRole === 'picker') {
+        await clearToken();
+        await storageService.remove(STORAGE_KEYS.user);
+        return {
+          ok: false,
+          data: result.data,
+          error:
+            'This account is registered as a picker. Please use the Picker app.',
+          status: 403,
+          appCode: 'ROLE_MISMATCH',
+        };
+      }
+      await saveToken(result.data.token);
+      if (result.data.user) {
+        await storageService.set(
+          STORAGE_KEYS.user,
+          JSON.stringify(result.data.user),
+        );
+      }
+    }
+    return result;
+  },
+
+  async verifyRegistrationOtp(phone, email, otp) {
+    const result = await request<VerifyOtpData>(
+      '/picker/auth/verify-registration-otp',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          phone: phone.replace(/\D/g, '').slice(-10),
+          email: email.trim().toLowerCase(),
+          otp,
+          workforceRole: 'rider',
+        }),
+        skipAuth: true,
+      },
+    );
+    if (result.ok && result.data?.token) {
+      if (result.data.user?.workforceRole === 'picker') {
+        await clearToken();
+        await storageService.remove(STORAGE_KEYS.user);
+        return {
+          ok: false,
+          data: result.data,
+          error:
+            'This account is registered as a picker. Please use the Picker app.',
+          status: 403,
+          appCode: 'ROLE_MISMATCH',
+        };
+      }
       await saveToken(result.data.token);
       if (result.data.user) {
         await storageService.set(
@@ -176,7 +310,6 @@ export const authApi: AuthApi = {
       method: 'POST',
       skipRefresh: true,
     });
-    // Clear local session after the revoke call still had the Bearer token
     await clearToken();
     await storageService.remove(STORAGE_KEYS.user);
     return result;

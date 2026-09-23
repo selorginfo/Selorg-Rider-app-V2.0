@@ -55,29 +55,40 @@ export function LoginScreen() {
     : phoneError(state.phone);
   const showFieldError = fieldTouched && !!fieldError;
 
-  const title =
-    state.authIntent === 'signup'
-      ? 'Create your rider account'
-      : 'Sign in to ride';
-  const subtitle = isEmail
-    ? "We'll email you a one-time code"
-    : state.loginMethod === 'whatsapp'
-    ? "We'll send a one-time code on WhatsApp"
-    : "We'll send a one-time code by SMS";
+  const isSignup = state.authIntent === 'signup';
+  const title = isSignup ? 'Create your rider account' : 'Sign in to ride';
+  const subtitle = isSignup
+    ? "We'll verify your email with a one-time code, then start onboarding"
+    : isEmail
+      ? "We'll email you a one-time code"
+      : state.loginMethod === 'whatsapp'
+        ? "We'll send a one-time code on WhatsApp"
+        : "We'll send a one-time code by SMS";
   const fieldLabel = isEmail
     ? 'Email Address'
     : state.loginMethod === 'whatsapp'
-    ? 'WhatsApp Number'
-    : 'Mobile Number';
+      ? 'WhatsApp Number'
+      : 'Mobile Number';
   const hint = state.loginNotFound
     ? isEmail
-      ? "We couldn't find an account for this email. Try Create Account instead."
-      : "We couldn't find an account for this number. Try Create Account instead."
-    : isEmail
-    ? 'Enter the email linked to your rider account.'
-    : "We'll send a one-time code to this number.";
-  const sendLabel =
-    state.loginMethod === 'whatsapp' ? 'Send code on WhatsApp' : 'Send OTP';
+      ? 'No rider account found with this email address. Please create an account first.'
+      : 'No rider account found with this phone number. Please create an account first.'
+    : isSignup
+      ? 'Enter both phone and email. We will send the OTP to your email.'
+      : isEmail
+        ? 'Enter the email linked to your rider account.'
+        : "We'll send a one-time code to this number.";
+  const sendLabel = isSignup
+    ? 'Send email OTP'
+    : state.loginMethod === 'whatsapp'
+      ? 'Send code on WhatsApp'
+      : 'Send OTP';
+
+  const phoneFieldError = phoneError(state.phone);
+  const emailFieldError = emailError(state.email);
+  const signupInvalid = isSignup && (!!phoneFieldError || !!emailFieldError);
+  const loginInvalid = !isSignup && !!fieldError;
+  const canSubmit = isSignup ? !signupInvalid : !loginInvalid;
 
   useEffect(() => {
     if (!cfg.emailLoginEnabled && state.loginMethod === 'email') {
@@ -95,15 +106,33 @@ export function LoginScreen() {
       return;
     }
     setFieldTouched(true);
-    const err = authTargetError(state.loginMethod, state.email, state.phone);
-    if (err) {
-      setSendError('');
-      return;
+    if (isSignup) {
+      if (phoneFieldError || emailFieldError) {
+        setSendError('');
+        return;
+      }
+    } else {
+      const err = authTargetError(state.loginMethod, state.email, state.phone);
+      if (err) {
+        setSendError('');
+        return;
+      }
     }
     setSendError('');
     const result = await actions.sendOtp();
     if (!result.ok) {
-      setSendError(result.error || 'Unable to send OTP. Please try again.');
+      const nudgeEmail =
+        !isSignup &&
+        state.loginMethod !== 'email' &&
+        cfg.emailLoginEnabled &&
+        (result.appCode === 'ACCOUNT_NOT_FOUND' ||
+          result.appCode === 'INVALID_PHONE' ||
+          result.appCode === 'OTP_PROVIDER_ERROR' ||
+          String(result.appCode || '').startsWith('SMS_'));
+      setSendError(
+        (result.error || 'Unable to continue. Please try again.') +
+          (nudgeEmail ? ' Try logging in with your email instead.' : ''),
+      );
       return;
     }
     actions.resetOtp();
@@ -156,52 +185,110 @@ export function LoginScreen() {
                     {subtitle}
                   </AppText>
 
-                  <AppText style={styles.label}>Choose login method</AppText>
-                  <SegmentedControl
-                    options={methods}
-                    value={state.loginMethod}
-                    onChange={id => actions.setLoginMethod(id as never)}
-                  />
+                  {!isSignup && (
+                    <>
+                      <AppText style={styles.label}>Choose login method</AppText>
+                      <SegmentedControl
+                        options={methods}
+                        value={state.loginMethod}
+                        onChange={id => actions.setLoginMethod(id as never)}
+                      />
+                    </>
+                  )}
 
-                  <AppText style={styles.label}>{fieldLabel}</AppText>
-                  {isEmail ? (
-                    <View
-                      style={[
-                        styles.emailRow,
-                        showFieldError && styles.fieldInvalid,
-                      ]}>
-                      <AppText style={styles.emailPrefix}>✉️</AppText>
-                      <TextInput
-                        value={state.email}
+                  {isSignup ? (
+                    <>
+                      <AppText style={styles.label}>Mobile Number</AppText>
+                      <PhoneInput
+                        value={state.phone}
+                        invalid={fieldTouched && !!phoneFieldError}
                         onChangeText={v => {
                           setFieldTouched(true);
                           setSendError('');
-                          actions.setEmail(v);
+                          actions.setPhone(v);
                         }}
-                        onBlur={() => setFieldTouched(true)}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        placeholder="you@example.com"
-                        placeholderTextColor={colors.textFaint}
-                        underlineColorAndroid="transparent"
-                        selectionColor={colors.primary}
-                        style={styles.emailInput}
                       />
-                    </View>
+                      {fieldTouched && !!phoneFieldError && (
+                        <AppText style={styles.fieldError}>
+                          {phoneFieldError}
+                        </AppText>
+                      )}
+                      <AppText style={styles.label}>Email Address</AppText>
+                      <View
+                        style={[
+                          styles.emailRow,
+                          fieldTouched &&
+                            !!emailFieldError &&
+                            styles.fieldInvalid,
+                        ]}>
+                        <AppText style={styles.emailPrefix}>✉️</AppText>
+                        <TextInput
+                          value={state.email}
+                          onChangeText={v => {
+                            setFieldTouched(true);
+                            setSendError('');
+                            actions.setEmail(v);
+                          }}
+                          onBlur={() => setFieldTouched(true)}
+                          keyboardType="email-address"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          placeholder="you@example.com"
+                          placeholderTextColor={colors.textFaint}
+                          underlineColorAndroid="transparent"
+                          selectionColor={colors.primary}
+                          style={styles.emailInput}
+                        />
+                      </View>
+                      {fieldTouched && !!emailFieldError && (
+                        <AppText style={styles.fieldError}>
+                          {emailFieldError}
+                        </AppText>
+                      )}
+                    </>
                   ) : (
-                    <PhoneInput
-                      value={state.phone}
-                      invalid={showFieldError}
-                      onChangeText={v => {
-                        setFieldTouched(true);
-                        setSendError('');
-                        actions.setPhone(v);
-                      }}
-                    />
-                  )}
-                  {showFieldError && (
-                    <AppText style={styles.fieldError}>{fieldError}</AppText>
+                    <>
+                      <AppText style={styles.label}>{fieldLabel}</AppText>
+                      {isEmail ? (
+                        <View
+                          style={[
+                            styles.emailRow,
+                            showFieldError && styles.fieldInvalid,
+                          ]}>
+                          <AppText style={styles.emailPrefix}>✉️</AppText>
+                          <TextInput
+                            value={state.email}
+                            onChangeText={v => {
+                              setFieldTouched(true);
+                              setSendError('');
+                              actions.setEmail(v);
+                            }}
+                            onBlur={() => setFieldTouched(true)}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholder="you@example.com"
+                            placeholderTextColor={colors.textFaint}
+                            underlineColorAndroid="transparent"
+                            selectionColor={colors.primary}
+                            style={styles.emailInput}
+                          />
+                        </View>
+                      ) : (
+                        <PhoneInput
+                          value={state.phone}
+                          invalid={showFieldError}
+                          onChangeText={v => {
+                            setFieldTouched(true);
+                            setSendError('');
+                            actions.setPhone(v);
+                          }}
+                        />
+                      )}
+                      {showFieldError && (
+                        <AppText style={styles.fieldError}>{fieldError}</AppText>
+                      )}
+                    </>
                   )}
 
                   <Banner tone="info" icon="ⓘ" text={hint} style={styles.hint} />
@@ -213,18 +300,61 @@ export function LoginScreen() {
                       style={styles.hint}
                     />
                   )}
+                  {state.loginNotFound && (
+                    <TextButton
+                      label="Create an account"
+                      onPress={() => {
+                        actions.setAuthIntent('signup');
+                        setSendError('');
+                      }}
+                      color={colors.primary}
+                      weight="700"
+                      size={13}
+                      style={styles.switch}
+                    />
+                  )}
+                  {!isSignup &&
+                    state.suggestEmailLogin &&
+                    cfg.emailLoginEnabled &&
+                    state.loginMethod !== 'email' && (
+                      <TextButton
+                        label="Log in with email instead"
+                        onPress={() => {
+                          actions.setLoginMethod('email');
+                          setSendError('');
+                          setFieldTouched(false);
+                        }}
+                        color={colors.primary}
+                        weight="700"
+                        size={13}
+                        style={styles.switch}
+                      />
+                    )}
+                  {/already registered/i.test(sendError) && (
+                    <TextButton
+                      label="Login instead"
+                      onPress={() => {
+                        actions.setAuthIntent('login');
+                        setSendError('');
+                      }}
+                      color={colors.primary}
+                      weight="700"
+                      size={13}
+                      style={styles.switch}
+                    />
+                  )}
 
                   <PrimaryButton
                     label={state.authBusy ? 'Sending…' : sendLabel}
                     onPress={onSend}
-                    disabled={!!fieldError || state.authBusy}
+                    disabled={!canSubmit || state.authBusy}
                     loading={state.authBusy}
                     height={52}
                     style={styles.send}
                   />
                   <TextButton
                     label={
-                      state.authIntent === 'signup'
+                      isSignup
                         ? 'Already have an account? Log in'
                         : 'New rider? Create account'
                     }

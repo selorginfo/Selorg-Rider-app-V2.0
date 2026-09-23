@@ -75,6 +75,10 @@ function getDevApiCandidates(): string[] {
   const skipEnvLoopback = Boolean(
     metroHost && !isLoopbackHost(metroHost),
   );
+  const metroIsLoopback = Boolean(metroHost && isLoopbackHost(metroHost));
+  const metroIsLan = Boolean(
+    metroHost && !isLoopbackHost(metroHost) && !isEmulatorOnlyHost(metroHost),
+  );
 
   const add = (raw?: string | null) => {
     const url = sanitizeApiBaseUrl(raw);
@@ -93,8 +97,28 @@ function getDevApiCandidates(): string[] {
     preferred.push(url);
   };
 
-  // USB/wireless adb reverse: Metro on localhost → API on 127.0.0.1.
-  if (metroHost && isLoopbackHost(metroHost)) {
+  // Physical device on same Wi‑Fi: Metro LAN IP → same machine as selorg-service.
+  if (metroIsLan) {
+    add(`http://${metroHost}:${DEV_API_PORT}${DEV_API_PATH}`);
+  }
+
+  // Explicit non-loopback .env (LAN IP) — preferred when Metro uses adb reverse
+  // (scriptURL is localhost) so the phone can still reach the PC without
+  // `adb reverse tcp:3333`.
+  for (const raw of [ENV_DEV_API_BASE_URL, ENV_API_BASE_URL]) {
+    const url = sanitizeApiBaseUrl(raw);
+    if (!url || isLoopbackUrl(url)) {
+      continue;
+    }
+    if (skipEnvLoopback && isEmulatorOnlyUrl(url)) {
+      continue;
+    }
+    add(url);
+  }
+
+  // USB/wireless adb reverse: Metro on localhost → API on 127.0.0.1
+  // (requires: adb reverse tcp:3333 tcp:3333).
+  if (metroIsLoopback) {
     add(`http://127.0.0.1:${DEV_API_PORT}${DEV_API_PATH}`);
     add(`http://localhost:${DEV_API_PORT}${DEV_API_PATH}`);
   }
@@ -104,16 +128,7 @@ function getDevApiCandidates(): string[] {
     add(`http://${metroHost}:${DEV_API_PORT}${DEV_API_PATH}`);
   }
 
-  // Physical device on same Wi‑Fi: Metro LAN IP → same machine as selorg-service.
-  if (
-    metroHost &&
-    !isLoopbackHost(metroHost) &&
-    !isEmulatorOnlyHost(metroHost)
-  ) {
-    add(`http://${metroHost}:${DEV_API_PORT}${DEV_API_PATH}`);
-  }
-
-  // Explicit .env (LAN IP, or 127.0.0.1 only when Metro is also loopback / reverse).
+  // Loopback .env only when Metro is also loopback / reverse (or unknown).
   for (const raw of [ENV_DEV_API_BASE_URL, ENV_API_BASE_URL]) {
     const url = sanitizeApiBaseUrl(raw);
     if (!url) {
@@ -167,7 +182,30 @@ export const environment = {
 };
 
 if (__DEV__) {
+  const metroHost = getMetroHost();
   console.log('[SelorgRider] API base URL:', environment.apiBaseUrl);
   console.log('[SelorgRider] API candidates:', environment.apiBaseUrls);
   console.log('[SelorgRider] APP_MODE:', ENV_APP_MODE || '(unset)');
+  console.log('[SelorgRider] Metro host:', metroHost || '(none)');
+  console.log(
+    '[SelorgRider] Device hint:',
+    isLoopbackHost(metroHost)
+      ? 'USB/adb reverse (127.0.0.1) — run: adb reverse tcp:3333 tcp:3333'
+      : isEmulatorOnlyHost(metroHost)
+        ? 'Android emulator (10.0.2.2)'
+        : metroHost
+          ? 'Physical device Wi-Fi (Metro LAN IP)'
+          : 'Metro host unknown',
+  );
+  if (
+    Platform.OS === 'android' &&
+    metroHost &&
+    !isLoopbackHost(metroHost) &&
+    !isEmulatorOnlyHost(metroHost) &&
+    isLoopbackUrl(environment.apiBaseUrl)
+  ) {
+    console.warn(
+      '[SelorgRider] Physical device must not use 127.0.0.1 unless adb reverse is set. Prefer Metro LAN IP.',
+    );
+  }
 }

@@ -9,6 +9,7 @@ import type {
   HistoryOrderDto,
   IncentiveTodayDto,
   ShiftSlotDto,
+  StartShiftResultDto,
   WalletBalanceDto,
   WalletTransactionDto,
 } from '../../types/api';
@@ -57,7 +58,10 @@ export interface EarningsSummary {
 export interface RiderApi {
   getShifts(): Promise<ShiftSlot[]>;
   bookShift(id: string, booked: boolean): Promise<ApiResult<unknown>>;
-  startShift(shiftId: string): Promise<ApiResult<unknown>>;
+  startShift(
+    shiftId: string,
+    location?: {latitude: number; longitude: number},
+  ): Promise<ApiResult<StartShiftResultDto>>;
   endShift(shiftId: string): Promise<ApiResult<unknown>>;
   goOnline(location?: {
     latitude: number;
@@ -129,14 +133,22 @@ export const riderApi: RiderApi = {
     });
   },
 
-  async startShift(shiftId) {
-    // Empty / non-ObjectId → shiftless 24h online via go-online.
+  async startShift(shiftId, location) {
     if (!shiftId || !isObjectId(shiftId)) {
-      return riderApi.goOnline();
+      return {
+        ok: false as const,
+        data: null as unknown as StartShiftResultDto,
+        error: 'Select a valid shift to start working.',
+        status: 400,
+        appCode: 'SHIFT_REQUIRED',
+      };
     }
-    return request('/picker/shifts/start', {
+    return request<StartShiftResultDto>('/picker/shifts/start', {
       method: 'POST',
-      body: JSON.stringify({shiftId}),
+      body: JSON.stringify({
+        shiftId,
+        ...(location ? {location} : {}),
+      }),
     });
   },
 

@@ -26,6 +26,8 @@ export interface RiderState {
   accountStatus: AccountStatus;
   loginMethod: LoginMethod;
   loginNotFound: boolean;
+  /** Login via mobile/WhatsApp failed — prompt user to try email. */
+  suggestEmailLogin: boolean;
   phone: string;
   email: string;
   otp: string;
@@ -35,6 +37,8 @@ export interface RiderState {
   isOnline: boolean;
   shiftSheetOpen: boolean;
   activeShiftId: string | null;
+  /** Display label for the started shift (e.g. "6:00 AM – 10:00 AM"). */
+  activeShiftTime: string | null;
   pickedShiftId: string | null;
   booked: Record<string, boolean>;
   shifts: ShiftSlot[];
@@ -128,6 +132,7 @@ export const initialState: RiderState = {
   accountStatus: 'none',
   loginMethod: 'mobile',
   loginNotFound: false,
+  suggestEmailLogin: false,
   phone: '',
   email: '',
   otp: '',
@@ -137,6 +142,7 @@ export const initialState: RiderState = {
   isOnline: false,
   shiftSheetOpen: false,
   activeShiftId: null,
+  activeShiftTime: null,
   pickedShiftId: null,
   booked: {},
   shifts: [],

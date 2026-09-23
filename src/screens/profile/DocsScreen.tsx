@@ -39,13 +39,17 @@ function findDocRow(
   if (side === 'file') {
     return rows[0];
   }
-  return (
-    rows.find(d => d.side === side) ||
-    (side === 'front' ? rows.find(d => !d.side) : undefined)
-  );
+  const normalized = rows.map(d => ({
+    row: d,
+    side: (d.side || 'front') as KycDocumentSide,
+  }));
+  return normalized.find(d => d.side === side)?.row;
 }
 
 function mapStatus(raw: string | undefined, partial: boolean): DocUiStatus {
+  if (partial) {
+    return 'partial';
+  }
   const s = (raw || 'missing').toLowerCase();
   if (s === 'approved' || s === 'verified') {
     return 'approved';
@@ -55,9 +59,6 @@ function mapStatus(raw: string | undefined, partial: boolean): DocUiStatus {
   }
   if (s === 'rejected') {
     return 'rejected';
-  }
-  if (partial) {
-    return 'partial';
   }
   return 'missing';
 }
