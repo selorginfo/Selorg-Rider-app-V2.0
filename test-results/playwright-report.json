@@ -1,0 +1,3642 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\playwright.config.ts",
+    "rootDir": "C:/Users/lmbac/Desktop/Selorg V1.3/Selorg-RiderApp-v1.3/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "apiBaseUrl": "http://127.0.0.1:3333",
+      "pickerPrefix": "/api/v1/picker",
+      "app": "Selorg-RiderApp-v1.3",
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/playwright-report.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "open": "never",
+          "outputFolder": "playwright-report"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/lmbac/Desktop/Selorg V1.3/Selorg-RiderApp-v1.3/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "apiBaseUrl": "http://127.0.0.1:3333",
+          "pickerPrefix": "/api/v1/picker",
+          "app": "Selorg-RiderApp-v1.3",
+          "actualWorkers": 1
+        },
+        "id": "api",
+        "name": "api",
+        "testDir": "C:/Users/lmbac/Desktop/Selorg V1.3/Selorg-RiderApp-v1.3/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/api\\/.*\\.spec\\.ts/"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/Users/lmbac/Desktop/Selorg V1.3/Selorg-RiderApp-v1.3/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "apiBaseUrl": "http://127.0.0.1:3333",
+          "pickerPrefix": "/api/v1/picker",
+          "app": "Selorg-RiderApp-v1.3",
+          "actualWorkers": 1
+        },
+        "id": "flows",
+        "name": "flows",
+        "testDir": "C:/Users/lmbac/Desktop/Selorg V1.3/Selorg-RiderApp-v1.3/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/flows\\/.*\\.spec\\.ts/"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "api\\01-public-auth.api.spec.ts",
+      "file": "api/01-public-auth.api.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Environment & connectivity",
+          "file": "api/01-public-auth.api.spec.ts",
+          "line": 20,
+          "column": 6,
+          "specs": [
+            {
+              "title": "backend is reachable on configured API_BASE",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 71,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:36.858Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-9a9a339e92ae9b809441",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 21,
+              "column": 7
+            },
+            {
+              "title": "Rider APP_API_BASE resolves picker config",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 23,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.135Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-f5405b5f1507e8a76a12",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 31,
+              "column": 7
+            },
+            {
+              "title": "OPTIONS preflight on picker config (CORS soft check)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 54,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.218Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-6e619a616e1a9f56005a",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 39,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public / guest-tolerant APIs used by Rider App",
+          "file": "api/01-public-auth.api.spec.ts",
+          "line": 52,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /config — config",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 38,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.305Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-5b7feebb918d2f1232f9",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 64,
+              "column": 9
+            },
+            {
+              "title": "GET /legal/terms — legal terms",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 115,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.375Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-b273df0c580cb4caddc5",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 64,
+              "column": 9
+            },
+            {
+              "title": "GET /legal/privacy — legal privacy",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 107,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.529Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-fa8df69b2bda0f704a24",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 64,
+              "column": 9
+            },
+            {
+              "title": "GET /faq?limit=10 — faq",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 84,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.655Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-10f7b50c3d027408e1c4",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 64,
+              "column": 9
+            },
+            {
+              "title": "GET /training/videos — training videos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 51,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.769Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-456dc127c6fd6cae3fa0",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 64,
+              "column": 9
+            },
+            {
+              "title": "GET /work-locations — work locations",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 136,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:37.841Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-65ba72ecea93f1356e70",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 64,
+              "column": 9
+            },
+            {
+              "title": "GET /config exposes otpLength=4 matching environment.otpLength",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:38.005Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-e5fb38271461d9ceccf3",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 74,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "OTP auth contract (authApi)",
+          "file": "api/01-public-auth.api.spec.ts",
+          "line": 81,
+          "column": 6,
+          "specs": [
+            {
+              "title": "send-otp rejects missing phone",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:38.042Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-5e6615b5ab7304bd67e5",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 82,
+              "column": 7
+            },
+            {
+              "title": "send-otp rejects invalid phone",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:38.083Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-dcb6ac1494b5b24332fb",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 89,
+              "column": 7
+            },
+            {
+              "title": "verify-otp rejects wrong otp",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "OTP send blocked/unavailable: 502 {\"success\":false,\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"data\":null,\"error\":{\"code\":502,\"appCode\":\"SMS_SENDER_NOT_PROVISIONED\",\"title\":\"An error occurred while communicating with an upstream service\",\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"details\":null},\"pagination\":null,\"timestamp\":\"2026-09-17T07:20:38.965Z\"}",
+                      "location": {
+                        "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\api\\01-public-auth.api.spec.ts",
+                        "line": 102,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 838,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:38.120Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "OTP send blocked/unavailable: 502 {\"success\":false,\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"data\":null,\"error\":{\"code\":502,\"appCode\":\"SMS_SENDER_NOT_PROVISIONED\",\"title\":\"An error occurred while communicating with an upstream service\",\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"details\":null},\"pagination\":null,\"timestamp\":\"2026-09-17T07:20:38.965Z\"}",
+                          "location": {
+                            "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\api\\01-public-auth.api.spec.ts",
+                            "line": 102,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-8d5424d10ae4efab7b07",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 98,
+              "column": 7
+            },
+            {
+              "title": "verify-otp rejects missing fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:38.984Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-909a3f7e3fcc705a4dc5",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 119,
+              "column": 7
+            },
+            {
+              "title": "send-otp + verify with stored OTP returns token (authApi shape)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "OTP provider/env blocked send: 502 {\"success\":false,\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"data\":null,\"error\":{\"code\":502,\"appCode\":\"SMS_SENDER_NOT_PROVISIONED\",\"title\":\"An error occurred while communicating with an upstream service\",\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"details\":null},\"pagination\":null,\"timestamp\":\"2026-09-17T07:20:39.469Z\"}",
+                      "location": {
+                        "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\api\\01-public-auth.api.spec.ts",
+                        "line": 134,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 443,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:39.018Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "OTP provider/env blocked send: 502 {\"success\":false,\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"data\":null,\"error\":{\"code\":502,\"appCode\":\"SMS_SENDER_NOT_PROVISIONED\",\"title\":\"An error occurred while communicating with an upstream service\",\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"details\":null},\"pagination\":null,\"timestamp\":\"2026-09-17T07:20:39.469Z\"}",
+                          "location": {
+                            "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\api\\01-public-auth.api.spec.ts",
+                            "line": 134,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-c27a9eb31eaccb704a8b",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "loginRider helper establishes session (otp or minted fallback)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 704,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:39.483Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-d7d034a1bb30e237bb5b",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 172,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Auth-gated APIs without token (negative)",
+          "file": "api/01-public-auth.api.spec.ts",
+          "line": 179,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /profile without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.207Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-c178126b146322619c43",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "GET /dashboard/today without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.254Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-25b84e393a70cda6fe03",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "GET /wallet without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.297Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-d95e078dcc0ebcbc6160",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "GET /cash/summary without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.335Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-9e124fa02d18a6a87fff",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "GET /shared-orders/assignorders?scope=all without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.371Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-eb66bb2816bf55ca985f",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "GET /notifications?page=1&limit=10 without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.407Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-5029a7bab88275c4aa04",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "GET /settings/preferences without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.442Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-51f15b4cb8c5d230b485",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "GET /support/tickets?status=all&limit=20 without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.483Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-482b2b3049d47363d6d9",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "POST /auth/logout without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.525Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-a5142b0394f6eb0563b6",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "POST /auth/refresh without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.581Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-e8d8631f37da35147204",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "POST /shifts/go-online without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.624Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-bdcaa7d3998e85f5e540",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "POST /locations/track without token → 401/403",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.670Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-a0962409ba9e3087de7f",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 196,
+              "column": 9
+            },
+            {
+              "title": "invalid Bearer token → 401",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.718Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-0d7b9931773a69d4771b",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 213,
+              "column": 7
+            },
+            {
+              "title": "malformed Authorization header → 401",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 12,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.756Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ad770b3d53598461ea3e-dfa6f6ab7c2597f6ee9d",
+              "file": "api/01-public-auth.api.spec.ts",
+              "line": 223,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "api\\02-authenticated.api.spec.ts",
+      "file": "api/02-authenticated.api.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Session / profile (profileApi + authApi)",
+          "file": "api/02-authenticated.api.spec.ts",
+          "line": 37,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /profile returns rider profile shape",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 214,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:40.868Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-561bbd59940bb510d919",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 38,
+              "column": 7
+            },
+            {
+              "title": "PUT /profile with name updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 217,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:42.932Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-7e3592abd85cf35bd0ad",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 47,
+              "column": 7
+            },
+            {
+              "title": "PUT /profile invalid email → 4xx validation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 50,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:43.173Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-bcc19b1d855f077d4629",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 56,
+              "column": 7
+            },
+            {
+              "title": "GET /onboarding/state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 234,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:43.246Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-773bed60af100063b7d1",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "GET /documents list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 69,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:43.500Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-859668691d78a2958157",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 71,
+              "column": 7
+            },
+            {
+              "title": "POST /auth/refresh rotates or returns token",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 139,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:43.586Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-cc59468c514f0c6c1de0",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 77,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Dashboard / shifts / online (riderApi + HomeScreen)",
+          "file": "api/02-authenticated.api.spec.ts",
+          "line": 88,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /dashboard/today",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 210,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:43.747Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-022abbc0e45c9198c714",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 89,
+              "column": 7
+            },
+            {
+              "title": "GET /incentives/today",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 110,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:43.977Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-594646380ed9af2321d4",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 98,
+              "column": 7
+            },
+            {
+              "title": "GET /shifts/available maps to ShiftSlot[]",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 103,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:44.107Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-75d2288c91dba7dff6b0",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 103,
+              "column": 7
+            },
+            {
+              "title": "GET /shifts/my",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 77,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:44.233Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-3cca0e15ed0c3be97a75",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 124,
+              "column": 7
+            },
+            {
+              "title": "POST /shifts/go-online (frontend HomeScreen critical path)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 102,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:44.327Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-88ed8ab3d5e7172891e5",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 129,
+              "column": 7
+            },
+            {
+              "title": "POST /shifts/go-offline (frontend HomeScreen)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 208,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:44.451Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-acf876d9942ccbf9859b",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 141,
+              "column": 7
+            },
+            {
+              "title": "POST /shifts/select with invalid shiftId → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 42,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:44.681Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-45976a7f91a56d032d24",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 153,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Orders / delivery (orderApi)",
+          "file": "api/02-authenticated.api.spec.ts",
+          "line": 163,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /shared-orders/assignorders?scope=all",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 206,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:44.752Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-c5834a3e661814340aa3",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 164,
+              "column": 7
+            },
+            {
+              "title": "GET /shared-orders/completed?type=all",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 75,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:44.983Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-c9afb592b2d5b1cb7acd",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 190,
+              "column": 7
+            },
+            {
+              "title": "GET /shared-orders/:orderId detail",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 127,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.078Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-a91e648110d95ab1c4ab",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 203,
+              "column": 7
+            },
+            {
+              "title": "GET /shared-orders/invalid-id → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 42,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.222Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-526f05e7bdbbc310ef75",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 212,
+              "column": 7
+            },
+            {
+              "title": "PUT status accepted on invalid id → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 108,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.292Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-0b1e78f569212a3d42e9",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 220,
+              "column": 7
+            },
+            {
+              "title": "POST complete missing otp → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 50,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.421Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-1649d864373c4f70f018",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 230,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Bulk delivery (bulkApi)",
+          "file": "api/02-authenticated.api.spec.ts",
+          "line": 242,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /bulk/batch",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 83,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.494Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-d34518b61f565e2f5baa",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 243,
+              "column": 7
+            },
+            {
+              "title": "GET /bulk/batches?status=completed",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 75,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.599Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-d501719ed8dd2ce6cc15",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 258,
+              "column": 7
+            },
+            {
+              "title": "POST /bulk/bag/load missing bag → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 43,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.693Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-b22f2bfd298702629293",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 274,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Wallet / cash / earnings (riderApi)",
+          "file": "api/02-authenticated.api.spec.ts",
+          "line": 284,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /wallet",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 73,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.752Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-a2d47c625a447f0932ff",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 285,
+              "column": 7
+            },
+            {
+              "title": "GET /wallet/earnings-breakdown?period=week",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 92,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.847Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-2656930337a764824c4c",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 291,
+              "column": 7
+            },
+            {
+              "title": "GET /wallet/history?period=week&limit=7",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 78,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:45.956Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-6988c38368c901ad1677",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 299,
+              "column": 7
+            },
+            {
+              "title": "GET /wallet/transactions?page=1&limit=20",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 73,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.081Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-6793bbf0ae05914b01d0",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 310,
+              "column": 7
+            },
+            {
+              "title": "GET /cash/summary",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 103,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.172Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-691f6562b5cfc462917b",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 317,
+              "column": 7
+            },
+            {
+              "title": "GET /cash/transactions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 78,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.301Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-a78fbcdd6260ab5b88a2",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 322,
+              "column": 7
+            },
+            {
+              "title": "POST /cash/deposits invalid amount → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 52,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.405Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-5c7c2cbdc3a712ce482e",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 335,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Support / settings / notifications / location / config",
+          "file": "api/02-authenticated.api.spec.ts",
+          "line": 346,
+          "column": 6,
+          "specs": [
+            {
+              "title": "GET /faq",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 70,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.483Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-82ce5cd63d44cca11ebd",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 347,
+              "column": 7
+            },
+            {
+              "title": "GET /support/tickets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 138,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.580Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-43f8455259328b325294",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 352,
+              "column": 7
+            },
+            {
+              "title": "POST /support/tickets create",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 214,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.744Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-efd8006c86b31948e311",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 359,
+              "column": 7
+            },
+            {
+              "title": "GET /support/chat/messages",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 135,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:46.980Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-d970193bb2003ffaf101",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 375,
+              "column": 7
+            },
+            {
+              "title": "POST /support/chat/messages",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 159,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:47.134Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-6b7ff15d4fa51477a22d",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 382,
+              "column": 7
+            },
+            {
+              "title": "GET /settings/preferences",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 75,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:47.314Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-0ae84b7fd4894da4eeb4",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 390,
+              "column": 7
+            },
+            {
+              "title": "PUT /settings/preferences",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 105,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:47.407Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-88ddee08848305556232",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 395,
+              "column": 7
+            },
+            {
+              "title": "GET /notifications",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 74,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:47.536Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-8a582c5d59620d925237",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 403,
+              "column": 7
+            },
+            {
+              "title": "PUT /notifications/read-all",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 176,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:47.633Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-bf0edbb568e4a86c43ab",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 410,
+              "column": 7
+            },
+            {
+              "title": "GET /config/cancel-reasons?context=standard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 191,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:47.832Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-2351aa1721c80982e0e6",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 415,
+              "column": 7
+            },
+            {
+              "title": "POST /locations/track",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 114,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:48.049Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-a1f5e94c75a7af65380f",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 422,
+              "column": 7
+            },
+            {
+              "title": "POST /push-token",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 181,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:48.181Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-92af31a4aa206a59d747",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 435,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Meta: OTP path status",
+          "file": "api/02-authenticated.api.spec.ts",
+          "line": 449,
+          "column": 6,
+          "specs": [
+            {
+              "title": "record whether OTP path was blocked",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:48.385Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "59cb9ea5cfe47820004e-2a53b78ac02a172582cc",
+              "file": "api/02-authenticated.api.spec.ts",
+              "line": 450,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "api\\03-negative.api.spec.ts",
+      "file": "api/03-negative.api.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Negative / failure contracts",
+          "file": "api/03-negative.api.spec.ts",
+          "line": 19,
+          "column": 6,
+          "specs": [
+            {
+              "title": "expired/invalid token rejected on profile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:48.441Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-568c42376875c92953a4",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 20,
+              "column": 7
+            },
+            {
+              "title": "customer audience token must not work on picker routes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:48.965Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-c3837d4a2b1c9338a8dc",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 29,
+              "column": 7
+            },
+            {
+              "title": "missing required fields on send-otp-email",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:48.996Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-b81fe810a6f293d3140b",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 38,
+              "column": 7
+            },
+            {
+              "title": "invalid email format on send-otp-email",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:49.031Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-bb56e328667eb08ce0f3",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 46,
+              "column": 7
+            },
+            {
+              "title": "verify-otp with intent=login for unknown phone → ACCOUNT_NOT_FOUND or similar",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "OTP send unavailable for unknown-phone login intent test",
+                      "location": {
+                        "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\api\\03-negative.api.spec.ts",
+                        "line": 59,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 799,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:49.058Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "OTP send unavailable for unknown-phone login intent test",
+                          "location": {
+                            "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\api\\03-negative.api.spec.ts",
+                            "line": 59,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-994bdf5170dadea7ff02",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 54,
+              "column": 7
+            },
+            {
+              "title": "empty body on location track → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 41,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:49.885Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-0a3c1013f828ba3f300f",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 72,
+              "column": 7
+            },
+            {
+              "title": "unexpected response structure still yields JSON envelope on 404",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:49.949Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-b85d33cab0e30bf63d3c",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 81,
+              "column": 7
+            },
+            {
+              "title": "wrong HTTP method on config (POST) → 4xx/405",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:49.983Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-a28ec3fbf34970f7fa31",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 92,
+              "column": 7
+            },
+            {
+              "title": "bulk stop deliver with invalid stopId → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 217,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:50.018Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-e4ab8ebb93e3d01e60a7",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 98,
+              "column": 7
+            },
+            {
+              "title": "notifications mark-read invalid id → 4xx",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 53,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:50.257Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-cdca5570edad21745e13",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 113,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Frontend client error mapping expectations",
+          "file": "api/03-negative.api.spec.ts",
+          "line": 122,
+          "column": 6,
+          "specs": [
+            {
+              "title": "401 responses include success=false for friendlyMessage(401)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:50.352Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-677f7761e4e4fa21e1c6",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 123,
+              "column": 7
+            },
+            {
+              "title": "validation error uses appCode or message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 19,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:50.387Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-aebc074c294311a65203",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 129,
+              "column": 7
+            },
+            {
+              "title": "test mobile constant available",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "api",
+                  "projectName": "api",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:50.434Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5aadde2a2d5da815bcbf-1bd7ead354f4ede50c78",
+              "file": "api/03-negative.api.spec.ts",
+              "line": 141,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "flows\\01-rider-journeys.flows.spec.ts",
+      "file": "flows/01-rider-journeys.flows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Flow: Login / OTP / session",
+          "file": "flows/01-rider-journeys.flows.spec.ts",
+          "line": 33,
+          "column": 6,
+          "specs": [
+            {
+              "title": "send OTP → verify (or skip if provider blocked) → token persisted shape",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "OTP send blocked: 502 {\"success\":false,\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"data\":null,\"error\":{\"code\":502,\"appCode\":\"SMS_SENDER_NOT_PROVISIONED\",\"title\":\"An error occurred while communicating with an upstream service\",\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"details\":null},\"pagination\":null,\"timestamp\":\"2026-09-17T07:20:55.618Z\"}",
+                      "location": {
+                        "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\flows\\01-rider-journeys.flows.spec.ts",
+                        "line": 39,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 1110,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:52.870Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "OTP send blocked: 502 {\"success\":false,\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"data\":null,\"error\":{\"code\":502,\"appCode\":\"SMS_SENDER_NOT_PROVISIONED\",\"title\":\"An error occurred while communicating with an upstream service\",\"message\":\"OTP delivery is not enabled for this number yet. Please contact support.\",\"details\":null},\"pagination\":null,\"timestamp\":\"2026-09-17T07:20:55.618Z\"}",
+                          "location": {
+                            "file": "C:\\Users\\lmbac\\Desktop\\Selorg V1.3\\Selorg-RiderApp-v1.3\\e2e\\flows\\01-rider-journeys.flows.spec.ts",
+                            "line": 39,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-07841da4621c113eb593",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "session persistence via refresh",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 315,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:55.653Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-c7271e3ff4a7e34096f6",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 65,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Flow: Profile / account",
+          "file": "flows/01-rider-journeys.flows.spec.ts",
+          "line": 78,
+          "column": 6,
+          "specs": [
+            {
+              "title": "load profile + hubs + update name",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 491,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:56.012Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-80fe5086cc9ec2c4fa17",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 79,
+              "column": 7
+            },
+            {
+              "title": "preferences get/put (SettingsScreen)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 189,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:56.734Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-31f795ebbdb0968c834c",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 91,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Flow: Go online → orders → history",
+          "file": "flows/01-rider-journeys.flows.spec.ts",
+          "line": 102,
+          "column": 6,
+          "specs": [
+            {
+              "title": "go-online then list assignorders then completed history",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 749,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:56.947Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-b4ad9c7b183297b362a0",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 103,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Flow: Wallet / cash (earnings + float)",
+          "file": "flows/01-rider-journeys.flows.spec.ts",
+          "line": 153,
+          "column": 6,
+          "specs": [
+            {
+              "title": "earnings breakdown + cash summary",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 257,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:57.720Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-15d207f6e97aa4b28510",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 154,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Flow: Support",
+          "file": "flows/01-rider-journeys.flows.spec.ts",
+          "line": 169,
+          "column": 6,
+          "specs": [
+            {
+              "title": "FAQ → tickets → chat message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 374,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:58.001Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-c7aba4c124a05e06cc99",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 170,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Flow: Logout",
+          "file": "flows/01-rider-journeys.flows.spec.ts",
+          "line": 188,
+          "column": 6,
+          "specs": [
+            {
+              "title": "logout invalidates session for subsequent profile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2624,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:20:58.397Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-8dc6b67adfd897050bc3",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 189,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Response mapping contracts (frontend mappers)",
+          "file": "flows/01-rider-journeys.flows.spec.ts",
+          "line": 214,
+          "column": 6,
+          "specs": [
+            {
+              "title": "assignorders envelope matches orderApi.listAvailable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 209,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:21:01.061Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-9634236e8f50286f06d0",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 215,
+              "column": 7
+            },
+            {
+              "title": "wallet history envelope matches riderApi.getDailyBreakdown",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 78,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:21:01.290Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-5e86c0b6c7ad8889f244",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 225,
+              "column": 7
+            },
+            {
+              "title": "error envelope has success=false for UI error state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "flows",
+                  "projectName": "flows",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-17T07:21:01.391Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab1c7f14b2962ecad1e-19fd88e289f8c0309812",
+              "file": "flows/01-rider-journeys.flows.spec.ts",
+              "line": 234,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-17T07:20:32.893Z",
+    "duration": 28713.557,
+    "expected": 92,
+    "skipped": 4,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

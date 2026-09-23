@@ -1,0 +1,254 @@
+{
+  "riders": [
+    {
+      "id": "6aaa78006d1b1c92cacfd432",
+      "phone": "9556735105",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa782f6d1b1c92cacfd4ae",
+      "phone": "9556782317",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa784a6d1b1c92cacfd52a",
+      "phone": "9556809139",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa7c66bb360187124ab8a3",
+      "phone": "9557861182",
+      "name": null,
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa7c970d608e14a23793df",
+      "phone": "9557910332",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa7cc1e21dd6427f54045f",
+      "phone": "9557952600",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa7d46b8bafe384341a3e9",
+      "phone": "9558085515",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa8036b8bafe384341a484",
+      "phone": "9558837097",
+      "name": null,
+      "status": "DOCS_REQUIRED",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": false
+    },
+    {
+      "id": "6aaa80c1b8bafe384341a4ad",
+      "phone": "9558976500",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa8284b8bafe384341a54d",
+      "phone": "9559427159",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa8578b8bafe384341a5ef",
+      "phone": "9560183942",
+      "name": "Automation Picker",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": true
+    },
+    {
+      "id": "6aaa88e7b8bafe384341a6f3",
+      "phone": "9561062391",
+      "name": null,
+      "status": "DOCS_REQUIRED",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": false
+    },
+    {
+      "id": "6aaa8920b8bafe384341a772",
+      "phone": "9561119477",
+      "name": null,
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": false
+    },
+    {
+      "id": "6aaa8964b8bafe384341a7f5",
+      "phone": "9561187642",
+      "name": null,
+      "status": "DOCS_REQUIRED",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": false
+    },
+    {
+      "id": "6aaa8eddd1aed986134a8e1c",
+      "phone": "9562588521",
+      "name": null,
+      "status": "docs_required",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": null,
+      "vehicleType": null,
+      "onboardingCompleted": false
+    },
+    {
+      "id": "6aab8da169d29a948452e46c",
+      "phone": "9698790921",
+      "name": "Rider Flow Tester",
+      "status": "under_review",
+      "workforceRole": "rider",
+      "isOnline": false,
+      "hub": "DS-Adyar-01",
+      "deliveryMode": "standard",
+      "vehicleType": null,
+      "onboardingCompleted": null
+    }
+  ],
+  "offered": [
+    {
+      "id": "6ab12e5f80c070ce45751c2e",
+      "orderNumber": "ORD-20260921-00042",
+      "status": "getting-packed",
+      "offerHubKey": "DS-Adyar-01",
+      "deliveryType": "standard",
+      "deliveryFee": 40,
+      "bagCode": "SG-100042-A",
+      "dispatchBay": "Rack-C4-Slot21",
+      "offerExpiresAt": null,
+      "itemCount": 2,
+      "seeded": false
+    },
+    {
+      "id": "6aab912fe32e4274ee67b4f1",
+      "orderNumber": "rider-automation-seed-1789628719000",
+      "status": "confirmed",
+      "offerHubKey": "DS-Adyar-01",
+      "deliveryType": "standard",
+      "deliveryFee": 20,
+      "bagCode": "BAG-AUTO-1",
+      "dispatchBay": "B1",
+      "offerExpiresAt": "2026-09-17T08:20:54.434Z",
+      "itemCount": 1,
+      "seeded": true
+    }
+  ],
+  "hubs": [
+    {
+      "id": "6aaa7c67bb360187124ab8b4",
+      "key": "chennai-adyar-ds",
+      "name": "Adyar Dark Store",
+      "status": null,
+      "isActive": true
+    },
+    {
+      "id": "6aaa7c67bb360187124ab8b5",
+      "key": "chennai-t-nagar-ds",
+      "name": "T. Nagar Dark Store",
+      "status": null,
+      "isActive": true
+    },
+    {
+      "id": "6aaa7c67bb360187124ab8b6",
+      "key": "chennai-hub",
+      "name": "Chennai Hub Warehouse",
+      "status": null,
+      "isActive": true
+    },
+    {
+      "id": "6aab8d9f92eba10c8a50fc0a",
+      "key": "DS-Adyar-01",
+      "name": "Adyar Darkstore",
+      "status": null,
+      "isActive": true
+    }
+  ]
+}

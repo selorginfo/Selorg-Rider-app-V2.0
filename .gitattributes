@@ -1,0 +1,12 @@
+# Normalize line endings to LF on checkin, leave working copy to Git's discretion.
+* text=auto eol=lf
+
+*.bat  text eol=crlf
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ttf  binary
+*.otf  binary
+*.keystore binary
+*.jar  binary
