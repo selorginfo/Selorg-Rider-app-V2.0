@@ -70,24 +70,8 @@ export function HomeScreen() {
     }
     if (!state.isOnline) {
       setOnlineError('');
-      // Prefer shiftless 24h online. Open shift sheet only when booked slots exist.
-      setOnlineBusy(true);
-      const result = await actions.goOnline();
-      setOnlineBusy(false);
-      if (result.ok) {
-        return;
-      }
-      if (result.appCode === 'HUB_REQUIRED') {
-        setOnlineError(result.error || 'Select a hub before going online.');
-        nav.navigate('ObHub');
-        return;
-      }
-      // Fall back to shift picker if backend still requires a booked slot.
-      if (result.appCode === 'ASSIGNMENT_NOT_FOUND' || state.shifts.length > 0) {
-        actions.openShiftSheet();
-        return;
-      }
-      setOnlineError(result.error || 'Could not go online. Try again.');
+      // Gate: rider must pick a shift before becoming available for work.
+      actions.openShiftSheet();
       return;
     }
     setOnlineBusy(true);
@@ -103,12 +87,14 @@ export function HomeScreen() {
     setHomeLoading(true);
     setHomeError('');
     try {
-      const [dashRes, profileRes, shifts, incentiveRes] = await Promise.all([
-        riderApi.getDashboardToday(),
-        profileApi.getProfile(),
-        riderApi.getShifts().catch(() => [] as Awaited<ReturnType<typeof riderApi.getShifts>>),
-        riderApi.getIncentiveToday(),
-      ]);
+      const [dashRes, profileRes, shifts, incentiveRes, myShiftsRes] =
+        await Promise.all([
+          riderApi.getDashboardToday(),
+          profileApi.getProfile(),
+          riderApi.getShifts().catch(() => [] as Awaited<ReturnType<typeof riderApi.getShifts>>),
+          riderApi.getIncentiveToday(),
+          riderApi.getMyShifts().catch(() => ({ok: false as const, data: null})),
+        ]);
       if (dashRes.ok && dashRes.data) {
         setDashboard(dashRes.data);
       } else if (!dashRes.ok) {
@@ -117,7 +103,74 @@ export function HomeScreen() {
       if (incentiveRes.ok && incentiveRes.data) {
         setIncentive(incentiveRes.data);
       }
-      const patch: Partial<typeof state> = {shifts};
+
+      let mergedShifts = shifts;
+      let startedShiftId: string | null = null;
+      let startedShiftTime: string | null = null;
+      if (myShiftsRes.ok && myShiftsRes.data) {
+        const rows = Array.isArray(myShiftsRes.data)
+          ? myShiftsRes.data
+          : Array.isArray((myShiftsRes.data as {shifts?: unknown[]}).shifts)
+            ? (myShiftsRes.data as {shifts: unknown[]}).shifts
+            : [];
+        const bookedIds = new Set<string>();
+        for (const row of rows) {
+          if (!row || typeof row !== 'object') {
+            continue;
+          }
+          const r = row as {
+            status?: string;
+            shiftId?: unknown;
+            id?: unknown;
+            _id?: unknown;
+          };
+          let sid = '';
+          if (typeof r.shiftId === 'string') {
+            sid = r.shiftId;
+          } else if (r.shiftId && typeof r.shiftId === 'object') {
+            const p = r.shiftId as {
+              id?: unknown;
+              _id?: unknown;
+              timeDisplay?: string;
+              startTime?: string;
+              endTime?: string;
+              time?: string;
+            };
+            sid = String(p.id || p._id || '');
+            if (String(r.status || '').toUpperCase() === 'STARTED' && sid) {
+              startedShiftId = sid;
+              startedShiftTime =
+                p.timeDisplay ||
+                (p.startTime && p.endTime
+                  ? `${p.startTime} – ${p.endTime}`
+                  : p.time || null);
+            }
+          } else {
+            sid = String(r.id || r._id || '');
+          }
+          if (sid) {
+            bookedIds.add(sid);
+          }
+          if (
+            !startedShiftId &&
+            String(r.status || '').toUpperCase() === 'STARTED' &&
+            sid
+          ) {
+            startedShiftId = sid;
+          }
+        }
+        if (bookedIds.size > 0) {
+          mergedShifts = shifts.map(s =>
+            bookedIds.has(s.id) ? {...s, booked: true} : s,
+          );
+        }
+        if (startedShiftId && !startedShiftTime) {
+          startedShiftTime =
+            mergedShifts.find(s => s.id === startedShiftId)?.time || null;
+        }
+      }
+
+      const patch: Partial<typeof state> = {shifts: mergedShifts};
       if (profileRes.ok && profileRes.data) {
         if (profileRes.data.name) {
           patch.epName = profileRes.data.name;
@@ -146,9 +199,17 @@ export function HomeScreen() {
         } else if (patch.isOnline === false) {
           patch.onlineSince = null;
         }
-        if (dashRes.data?.activeShift?.timeDisplay) {
-          // keep chip informative when shift mode
-        }
+      }
+      if (dashRes.data?.activeShift?.timeDisplay) {
+        patch.activeShiftTime = dashRes.data.activeShift.timeDisplay;
+      } else if (startedShiftTime) {
+        patch.activeShiftTime = startedShiftTime;
+      }
+      if (startedShiftId) {
+        patch.activeShiftId = startedShiftId;
+      } else if (patch.isOnline === false) {
+        patch.activeShiftId = null;
+        patch.activeShiftTime = null;
       }
       if (!isBulk && patch.isOnline !== false) {
         const listed = await orderApi.listAvailable(
@@ -210,9 +271,7 @@ export function HomeScreen() {
           <View style={styles.shiftChip}>
             <ClockMiniIcon />
             <AppText style={styles.shiftChipText} numberOfLines={1}>
-              {state.epHubName || state.epHubId
-                ? `${state.epHubName || state.epHubId}`
-                : activeShiftLabel(state)}
+              {activeShiftLabel(state)}
             </AppText>
           </View>
           {state.isOnline && !!onlineDurationLabel(state.onlineSince) && (
@@ -453,6 +512,24 @@ export function HomeScreen() {
           }
         />
       )}
+
+      <Pressable
+        onPress={() => {
+          actions.setPrev('home');
+          nav.navigate('Shifts');
+        }}
+        style={styles.bookSlots}>
+        <View style={styles.bookSlotsIcon}>
+          <CalendarSmallIcon color={colors.slate} />
+        </View>
+        <View style={styles.bookSlotsText}>
+          <AppText style={styles.bookSlotsTitle}>Book More Slots</AppText>
+          <AppText style={styles.bookSlotsSub}>
+            Schedule your upcoming shifts
+          </AppText>
+        </View>
+        <AppText style={styles.bookSlotsChev}>›</AppText>
+      </Pressable>
       </ContentColumn>
     </Screen>
   );
@@ -728,4 +805,28 @@ const styles = StyleSheet.create({
   newOrdersTitle: {fontWeight: '700', fontSize: 14, color: colors.ink},
   newOrdersSub: {fontWeight: '400', fontSize: 12, color: colors.textMuted},
   chev: {fontWeight: '700', fontSize: 20, color: colors.primary},
+
+  bookSlots: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: 16,
+    ...shadow('sm'),
+  },
+  bookSlotsIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: colors.chipBg,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bookSlotsText: {flex: 1, minWidth: 0},
+  bookSlotsTitle: {fontWeight: '700', fontSize: 14, color: colors.ink},
+  bookSlotsSub: {fontWeight: '400', fontSize: 12, color: colors.textMuted},
+  bookSlotsChev: {fontWeight: '700', fontSize: 20, color: colors.textFaint},
 });

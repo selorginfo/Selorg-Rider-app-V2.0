@@ -61,22 +61,10 @@ function slotKey(code: string, side: SlotSide): string {
   return `${code}:${side}`;
 }
 
-function findDocRow(
-  docs: DocumentDto[],
-  code: string,
-  side: SlotSide,
-): DocumentDto | undefined {
-  const rows = docs.filter(d => d.type.toLowerCase() === code);
-  if (side === 'file') {
-    return rows[0];
-  }
-  return (
-    rows.find(d => d.side === side) ||
-    (side === 'front' ? rows.find(d => !d.side) : undefined)
-  );
-}
-
 function mapStatus(raw: string | undefined, partial: boolean): DocUiStatus {
+  if (partial) {
+    return 'partial';
+  }
   const s = (raw || 'missing').toLowerCase();
   if (s === 'approved' || s === 'verified') {
     return 'approved';
@@ -87,10 +75,23 @@ function mapStatus(raw: string | undefined, partial: boolean): DocUiStatus {
   if (s === 'rejected') {
     return 'rejected';
   }
-  if (partial) {
-    return 'partial';
-  }
   return 'missing';
+}
+
+function findDocRow(
+  docs: DocumentDto[],
+  code: string,
+  side: SlotSide,
+): DocumentDto | undefined {
+  const rows = docs.filter(d => d.type.toLowerCase() === code);
+  if (side === 'file') {
+    return rows[0];
+  }
+  const normalized = rows.map(d => ({
+    row: d,
+    side: (d.side || 'front') as KycDocumentSide,
+  }));
+  return normalized.find(d => d.side === side)?.row;
 }
 
 function sideLabel(side: SlotSide): string {
@@ -347,6 +348,33 @@ export function UploadDocumentScreen() {
         setSlotUris(prev => ({...prev, [key]: result.data!.url as string}));
       }
       await syncFromServer();
+
+      // After front succeeds, prompt for the missing back so riders don't leave
+      // with a one-sided PAN/Aadhaar and a disabled Continue button.
+      if (twoSided && side === 'front') {
+        const docsResult = await profileApi.listDocuments();
+        const uploaded =
+          docsResult.ok && Array.isArray(docsResult.data) ? docsResult.data : [];
+        const hasBack = uploaded.some(
+          d =>
+            d.type.toLowerCase() === docType && (d.side || 'front') === 'back',
+        );
+        if (!hasBack) {
+          Alert.alert(
+            'Back photo still needed',
+            `Upload the back of your ${label} to continue.`,
+            [
+              {text: 'Later', style: 'cancel'},
+              {
+                text: 'Upload back',
+                onPress: () => {
+                  void onUpload('back');
+                },
+              },
+            ],
+          );
+        }
+      }
     } catch {
       restorePrevious();
       setError('Upload failed. Please try again.');

@@ -23,26 +23,46 @@ async function fetchWithHostFallback(
   path: string,
   init: RequestInit,
 ): Promise<{res: Response} | {networkError: true; aborted: boolean}> {
-  // Use only the primary API host. Multi-host probing made Send/Verify OTP
-  // feel "stuck" for 12–20s+ whenever the first candidate was wrong or offline.
-  const host = apiHosts()[0];
-  if (!host) {
+  // Prefer the primary host. On a hard network failure (wrong host / no reverse),
+  // try the next candidate once so physical devices can fall back to LAN IP.
+  const hosts = apiHosts().slice(0, 3);
+  if (hosts.length === 0) {
     return {networkError: true, aborted: false};
   }
-  const controller = new AbortController();
-  const timeoutMs = Math.min(environment.requestTimeoutMs, 8000);
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(`${host}${path}`, {
-      ...init,
-      signal: init.signal ?? controller.signal,
-    });
-    clearTimeout(timer);
-    return {res};
-  } catch (err) {
-    clearTimeout(timer);
-    return {networkError: true, aborted: isAbortError(err)};
+
+  let lastAborted = false;
+  for (let i = 0; i < hosts.length; i += 1) {
+    const host = hosts[i];
+    const controller = new AbortController();
+    // Keep retries short so a dead first host does not stall OTP for 20s+.
+    const timeoutMs =
+      i === 0
+        ? Math.min(environment.requestTimeoutMs, 8000)
+        : Math.min(environment.requestTimeoutMs, 4000);
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(`${host}${path}`, {
+        ...init,
+        signal: init.signal ?? controller.signal,
+      });
+      clearTimeout(timer);
+      if (__DEV__ && i > 0) {
+        console.log('[SelorgRider] API host fallback succeeded:', host);
+      }
+      return {res};
+    } catch (err) {
+      clearTimeout(timer);
+      lastAborted = isAbortError(err);
+      if (__DEV__) {
+        console.warn(
+          '[SelorgRider] API host failed:',
+          host,
+          lastAborted ? '(timeout)' : '(network)',
+        );
+      }
+    }
   }
+  return {networkError: true, aborted: lastAborted};
 }
 
 let _token: string | null = null;
@@ -200,7 +220,62 @@ function friendlyMessage(status: number, msg?: string, appCode?: string, details
     );
   }
   if (appCode === 'ACCOUNT_SUSPENDED') {
-    return 'Your account has been suspended. Contact support.';
+    return 'Your rider account is currently suspended. Please contact support.';
+  }
+  if (appCode === 'ACCOUNT_INACTIVE') {
+    return 'Your rider account is inactive. Please contact support.';
+  }
+  if (appCode === 'ACCOUNT_BLOCKED') {
+    return 'Your rider account has been blocked. Please contact support.';
+  }
+  if (appCode === 'ACCOUNT_DELETION_PENDING') {
+    return 'Your rider account is scheduled for deletion.';
+  }
+  if (appCode === 'ACCOUNT_REJECTED') {
+    return msg || 'Your rider application was not approved.';
+  }
+  if (appCode === 'ACCOUNT_PENDING') {
+    return msg || 'Your rider account is pending approval.';
+  }
+  if (appCode === 'ACCOUNT_NOT_FOUND') {
+    return (
+      msg ||
+      'No rider account found. Please create an account first.'
+    );
+  }
+  if (appCode === 'PHONE_ALREADY_REGISTERED') {
+    return (
+      msg ||
+      'This phone number is already registered. Please login using this number instead.'
+    );
+  }
+  if (appCode === 'EMAIL_ALREADY_REGISTERED') {
+    return (
+      msg ||
+      'This email address is already registered. Please login using this email instead.'
+    );
+  }
+  if (appCode === 'PHONE_AND_EMAIL_ALREADY_REGISTERED') {
+    return (
+      msg ||
+      'This phone number and email address are already registered. Please login instead.'
+    );
+  }
+  if (appCode === 'INVALID_OTP' || appCode === 'INCORRECT_OTP') {
+    return msg || 'Invalid OTP. Please try again.';
+  }
+  if (appCode === 'OTP_EXPIRED') {
+    return msg || 'OTP has expired. Please request a new code.';
+  }
+  if (appCode === 'OTP_TOO_MANY_ATTEMPTS' || appCode === 'OTP_RATE_LIMITED') {
+    return msg || 'Too many incorrect attempts. Please request a new code.';
+  }
+  if (
+    /valid enum value|CastError|ValidationError|E11000|MongoServerError|duplicate key/i.test(
+      msg || '',
+    )
+  ) {
+    return 'Something went wrong. Please try again.';
   }
   if (appCode === 'RIDER_OFFLINE') {
     return 'Go online to see available orders.';
@@ -243,7 +318,7 @@ function friendlyMessage(status: number, msg?: string, appCode?: string, details
     return 'Server error. Please try again shortly.';
   }
   if (status === 0) {
-    return 'Network unavailable.';
+    return 'Network error. Check your connection and try again.';
   }
   return msg || `Request failed (${status})`;
 }
@@ -276,6 +351,7 @@ async function tryRefreshToken(): Promise<boolean> {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-selorg-client': 'rider',
           Authorization: `Bearer ${_token}`,
         },
       });
@@ -320,6 +396,7 @@ export async function request<T>(
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'x-selorg-client': 'rider',
     ...(skipAuth ? {} : authHeaders()),
     ...(extraHeaders as Record<string, string> | undefined),
   };
@@ -412,6 +489,7 @@ export async function requestMultipart<T>(
   init?: {method?: string; idempotent?: boolean; skipRefresh?: boolean},
 ): Promise<ApiResult<T>> {
   const headers: Record<string, string> = {
+    'x-selorg-client': 'rider',
     ...authHeaders(),
   };
   if (init?.idempotent) {

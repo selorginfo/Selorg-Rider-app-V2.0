@@ -86,6 +86,13 @@ export function ObReviewScreen() {
 
     const result = await profileApi.submitOnboarding();
     if (result.ok) {
+      // TEMP: SL-RA-2002 is auto-approved in non-production submit — skip Pending.
+      if (result.data?.status === 'approved') {
+        actions.approveAccount();
+        nav.navigate('ObDone');
+        setSubmitting(false);
+        return;
+      }
       actions.submitOnboard();
       nav.navigate('Pending');
       setSubmitting(false);

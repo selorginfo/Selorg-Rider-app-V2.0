@@ -26,6 +26,8 @@ export interface AuthUserDto {
   status: string;
   onboardingCompleted: boolean;
   rejectedReason: string | null;
+  role?: string;
+  workforceRole?: 'picker' | 'rider' | null;
 }
 
 export interface VerifyOtpData {
@@ -98,6 +100,15 @@ export interface IncentiveTodayDto {
   lateCount?: number;
   footnote?: string;
   expiresAt?: string | null;
+}
+
+export interface StartShiftResultDto {
+  assignmentId?: string;
+  shiftId?: string;
+  status?: string;
+  startedAt?: string;
+  isOnline?: boolean;
+  shift?: {timeDisplay?: string} | null;
 }
 
 export interface ShiftSlotDto {

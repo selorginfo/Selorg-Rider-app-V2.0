@@ -20,7 +20,6 @@ export function OtpScreen() {
   const nav = useAppNavigation();
   const {state, actions} = useRider();
   const cfg = useAppConfig();
-  /** Backend always expects exactly 4 digits — ignore mismatched config. */
   const otpLength = OTP_LENGTH;
   const [seconds, setSeconds] = useState(cfg.otpResendSeconds);
   const [resendMsg, setResendMsg] = useState('');
@@ -39,7 +38,11 @@ export function OtpScreen() {
       return;
     }
     if (!isValidOtp(state.otp, otpLength)) {
-      actions.patch({otpError: `Enter the ${otpLength}-digit numeric code`});
+      actions.patch({
+        otpError: `Enter the ${otpLength}-digit numeric code`,
+        suggestEmailLogin:
+          state.authIntent !== 'signup' && state.loginMethod !== 'email',
+      });
       return;
     }
     const result = await actions.verifyOtp();
@@ -67,6 +70,17 @@ export function OtpScreen() {
     setResendMsg('Code resent. Enter the new code sent to you.');
   };
 
+  const targetLabel =
+    state.authIntent === 'signup'
+      ? state.email.trim().toLowerCase()
+      : otpTarget(state);
+
+  const showEmailLoginCta =
+    state.authIntent !== 'signup' &&
+    state.suggestEmailLogin &&
+    cfg.emailLoginEnabled &&
+    state.loginMethod !== 'email';
+
   return (
     <Screen
       background={colors.white}
@@ -85,8 +99,10 @@ export function OtpScreen() {
         />
         <AppText style={styles.title}>Verify OTP</AppText>
         <AppText style={styles.sub}>
-          Enter the {otpLength}-digit code sent to{'\n'}
-          <AppText style={styles.target}>{otpTarget(state)}</AppText>
+          {state.authIntent === 'signup'
+            ? `Enter the ${otpLength}-digit code sent to your email\n`
+            : `Enter the ${otpLength}-digit code sent to\n`}
+          <AppText style={styles.target}>{targetLabel}</AppText>
         </AppText>
 
         <View style={styles.otpWrap}>
@@ -103,32 +119,32 @@ export function OtpScreen() {
           <Banner
             tone="danger"
             icon="⚠"
-            text={
-              state.loginNotFound && state.loginMethod === 'email'
-                ? "We couldn't find an account for this email. Use Create Account, or go back and tap Create Rider Account."
-                : state.loginNotFound
-                ? "We couldn't find an account for this number. Use Create Account, or go back and tap Create Rider Account."
-                : state.otpError
-            }
+            text={state.otpError}
             style={styles.err}
           />
         )}
         {state.loginNotFound && (
           <TextButton
-            label="Switch to Create Account & verify"
-            onPress={async () => {
-              if (!isValidOtp(state.otp, otpLength)) {
-                actions.patch({
-                  otpError: `Enter the ${otpLength}-digit numeric code`,
-                });
-                return;
-              }
-              const result = await actions.verifyOtp('signup');
-              if (!result.ok) {
-                return;
-              }
-              const route = (result.route || 'ObWelcome') as keyof RootStackParamList;
-              resetTo(route);
+            label="Create an account"
+            onPress={() => {
+              actions.setAuthIntent('signup');
+              actions.resetOtp();
+              nav.navigate('Login');
+            }}
+            color={colors.primary}
+            weight="700"
+            size={13}
+            style={styles.switchSignup}
+          />
+        )}
+        {showEmailLoginCta && (
+          <TextButton
+            label="Log in with email instead"
+            onPress={() => {
+              actions.setLoginMethod('email');
+              actions.setAuthIntent('login');
+              actions.resetOtp();
+              nav.navigate('Login');
             }}
             color={colors.primary}
             weight="700"
@@ -147,7 +163,11 @@ export function OtpScreen() {
 
         <View style={styles.row}>
           <TextButton
-            label={seconds > 0 ? `Resend in 0:${String(seconds).padStart(2, '0')}` : 'Resend code'}
+            label={
+              seconds > 0
+                ? `Resend in 0:${String(seconds).padStart(2, '0')}`
+                : 'Resend code'
+            }
             onPress={onResend}
             color={seconds > 0 ? colors.textFaint : colors.primary}
           />

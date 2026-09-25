@@ -50,6 +50,26 @@ import {
   OTP_LENGTH,
 } from '../utils/validation';
 
+/** Mobile/WhatsApp login failures that should nudge the rider toward email login. */
+function shouldSuggestEmailLogin(
+  method: LoginMethod,
+  appCode?: string | null,
+): boolean {
+  if (method === 'email') {
+    return false;
+  }
+  const code = String(appCode || '');
+  return (
+    code === 'ACCOUNT_NOT_FOUND' ||
+    code === 'INVALID_PHONE' ||
+    code === 'INVALID_OTP' ||
+    code === 'OTP_EXPIRED' ||
+    code === 'OTP_TOO_MANY_ATTEMPTS' ||
+    code === 'OTP_PROVIDER_ERROR' ||
+    code.startsWith('SMS_')
+  );
+}
+
 type BulkReturn = 'BulkActive' | 'BulkOverview' | 'BulkAllStops';
 
 function mapAccountStatus(user?: AuthUserDto | null): RiderState['accountStatus'] {
@@ -76,6 +96,9 @@ function nextRouteFromScreen(nextScreen?: string, user?: AuthUserDto | null): ke
   }
   if (ns.includes('pending') || ns.includes('review')) {
     return 'Pending';
+  }
+  if (ns.includes('suspend') || ns.includes('block') || ns.includes('inactive') || ns.includes('deletion')) {
+    return 'Rejected';
   }
   if (ns.includes('onboard') || ns.includes('welcome') || ns === 'obwelcome') {
     return 'ObWelcome';
@@ -107,16 +130,21 @@ interface RiderActions {
   setOtp(v: string): void;
   setOtpDigit(index: number, digit: string): void;
   resetOtp(): void;
-  sendOtp(): Promise<{ok: boolean; error?: string}>;
-  resendOtp(): Promise<{ok: boolean; error?: string}>;
-  verifyOtp(intentOverride?: 'login' | 'signup' | null): Promise<{ok: boolean; error?: string; route?: string}>;
+  sendOtp(): Promise<{ok: boolean; error?: string; appCode?: string}>;
+  resendOtp(): Promise<{ok: boolean; error?: string; appCode?: string}>;
+  verifyOtp(): Promise<{ok: boolean; error?: string; route?: string; appCode?: string}>;
 
   goOnline(): Promise<{ok: boolean; error?: string; appCode?: string}>;
   goOffline(): Promise<{ok: boolean; error?: string}>;
   openShiftSheet(): void;
   closeShiftSheet(): void;
   pickShift(id: string): void;
-  startShift(): void;
+  /** Mark rider online after a successful POST /shifts/start. */
+  startShift(result?: {
+    shiftId?: string | null;
+    startedAt?: string | null;
+    timeDisplay?: string | null;
+  }): void;
   toggleBooked(id: string): Promise<{ok: boolean; error?: string}>;
 
   acceptOrder(orderId: string): void;
@@ -243,6 +271,12 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
     };
 
     const finishFromCachedUser = (user: AuthUserDto) => {
+      if (user.workforceRole === 'picker') {
+        void clearToken();
+        void storageService.remove(STORAGE_KEYS.user);
+        finishUnauthenticated();
+        return;
+      }
       dispatch({
         type: 'PATCH',
         patch: {
@@ -309,8 +343,9 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
         if (!profile.ok || !profile.data) {
           // Only wipe the session on real auth expiry. Network/5xx must not
           // bounce the rider back to Login (felt as "login page reload").
-          if (profile.status === 401) {
+          if (profile.status === 401 || profile.appCode === 'ROLE_MISMATCH') {
             await clearToken();
+            await storageService.remove(STORAGE_KEYS.user);
             finishUnauthenticated();
             return;
           }
@@ -413,14 +448,17 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
     return {
       patch: p,
 
-      setAuthIntent: i => p({authIntent: i, loginNotFound: false}),
+      setAuthIntent: i =>
+        p({authIntent: i, loginNotFound: false, suggestEmailLogin: false}),
       toggleAuthIntent: () =>
         p({
           authIntent:
             stateRef.current.authIntent === 'signup' ? 'login' : 'signup',
           loginNotFound: false,
+          suggestEmailLogin: false,
         }),
-      setLoginMethod: m => p({loginMethod: m}),
+      setLoginMethod: m =>
+        p({loginMethod: m, loginNotFound: false, suggestEmailLogin: false}),
       setPhone: v => p({phone: v.replace(/\D/g, '').slice(0, 10)}),
       setEmail: v => p({email: v.trim()}),
       setOtp: v =>
@@ -434,24 +472,95 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
 
       sendOtp: async () => {
         const s = stateRef.current;
-        const fieldError = authTargetError(s.loginMethod, s.email, s.phone);
-        if (fieldError) {
-          return {ok: false, error: fieldError};
-        }
+        const isSignup = s.authIntent === 'signup';
         p({
           authBusy: true,
           loginNotFound: false,
+          suggestEmailLogin: false,
           otpError: '',
         });
         try {
+          if (isSignup) {
+            const phoneErr = authTargetError('mobile', '', s.phone);
+            const emailErr = authTargetError('email', s.email, '');
+            if (phoneErr || emailErr) {
+              return {ok: false, error: phoneErr || emailErr};
+            }
+            const check = await authApi.checkRegistration(s.phone, s.email);
+            if (!check.ok) {
+              if (
+                check.appCode === 'PHONE_ALREADY_REGISTERED' ||
+                check.appCode === 'EMAIL_ALREADY_REGISTERED' ||
+                check.appCode === 'PHONE_AND_EMAIL_ALREADY_REGISTERED'
+              ) {
+                p({loginNotFound: false});
+              }
+              return {ok: false, error: check.error, appCode: check.appCode};
+            }
+            const result = await authApi.sendRegistrationOtp(
+              s.phone,
+              normalizeEmail(s.email),
+            );
+            if (!result.ok) {
+              return {ok: false, error: result.error, appCode: result.appCode};
+            }
+            return {ok: true};
+          }
+
+          const fieldError = authTargetError(s.loginMethod, s.email, s.phone);
+          if (fieldError) {
+            if (shouldSuggestEmailLogin(s.loginMethod, 'INVALID_PHONE')) {
+              p({suggestEmailLogin: true});
+            }
+            return {ok: false, error: fieldError};
+          }
           const target =
             s.loginMethod === 'email' ? normalizeEmail(s.email) : s.phone;
+          const check = await authApi.checkAccount(s.loginMethod, target);
+          if (!check.ok) {
+            if (check.appCode === 'ACCOUNT_NOT_FOUND') {
+              p({loginNotFound: true});
+            }
+            if (shouldSuggestEmailLogin(s.loginMethod, check.appCode)) {
+              p({suggestEmailLogin: true});
+            }
+            return {ok: false, error: check.error, appCode: check.appCode};
+          }
+          if (check.data?.exists === false || check.data?.next === 'CREATE_ACCOUNT') {
+            p({
+              loginNotFound: true,
+              suggestEmailLogin: shouldSuggestEmailLogin(
+                s.loginMethod,
+                'ACCOUNT_NOT_FOUND',
+              ),
+            });
+            return {
+              ok: false,
+              error:
+                check.data?.message ||
+                check.error ||
+                (s.loginMethod === 'email'
+                  ? 'No rider account found with this email address. Please create an account first.'
+                  : 'No rider account found with this phone number. Please create an account first.'),
+              appCode: 'ACCOUNT_NOT_FOUND',
+            };
+          }
+          if (check.data?.canLogin === false) {
+            return {
+              ok: false,
+              error: check.error || check.data?.message || 'Unable to login.',
+              appCode: check.appCode,
+            };
+          }
           const result = await authApi.sendOtp(s.loginMethod, target);
           if (!result.ok) {
             if (result.appCode === 'ACCOUNT_NOT_FOUND') {
               p({loginNotFound: true});
             }
-            return {ok: false, error: result.error};
+            if (shouldSuggestEmailLogin(s.loginMethod, result.appCode)) {
+              p({suggestEmailLogin: true});
+            }
+            return {ok: false, error: result.error, appCode: result.appCode};
           }
           return {ok: true};
         } catch (err) {
@@ -460,7 +569,7 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
             error:
               err instanceof Error && err.message
                 ? err.message
-                : 'Network unavailable.',
+                : 'Network error. Check your connection and try again.',
           };
         } finally {
           p({authBusy: false});
@@ -469,6 +578,16 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
 
       resendOtp: async () => {
         const s = stateRef.current;
+        if (s.authIntent === 'signup') {
+          const result = await authApi.resendRegistrationOtp(
+            s.phone,
+            normalizeEmail(s.email),
+          );
+          if (!result.ok) {
+            return {ok: false, error: result.error, appCode: result.appCode};
+          }
+          return {ok: true};
+        }
         const fieldError = authTargetError(s.loginMethod, s.email, s.phone);
         if (fieldError) {
           return {ok: false, error: fieldError};
@@ -477,50 +596,62 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
           s.loginMethod === 'email' ? normalizeEmail(s.email) : s.phone;
         const result = await authApi.resendOtp(s.loginMethod, target);
         if (!result.ok) {
-          return {ok: false, error: result.error};
+          if (shouldSuggestEmailLogin(s.loginMethod, result.appCode)) {
+            p({suggestEmailLogin: true});
+          }
+          return {ok: false, error: result.error, appCode: result.appCode};
         }
         return {ok: true};
       },
 
-      verifyOtp: async (intentOverride) => {
+      verifyOtp: async () => {
         const s = stateRef.current;
         const otpLen = OTP_LENGTH;
         if (!isValidOtp(s.otp, otpLen)) {
           return {ok: false, error: `Enter the ${otpLen}-digit code`};
         }
-        const fieldError = authTargetError(s.loginMethod, s.email, s.phone);
-        if (fieldError) {
-          return {ok: false, error: fieldError};
-        }
-        const intent =
-          intentOverride !== undefined
-            ? intentOverride
-            : s.authIntent || 'login';
-        if (intentOverride === 'signup' || intentOverride === 'login') {
-          p({authIntent: intentOverride, loginNotFound: false, otpError: ''});
-        }
-        p({authBusy: true, otpError: ''});
+        p({authBusy: true, otpError: '', loginNotFound: false, suggestEmailLogin: false});
         try {
-          const target =
-            s.loginMethod === 'email' ? normalizeEmail(s.email) : s.phone;
-          const result = await authApi.verifyOtp(
-            s.loginMethod,
-            target,
-            s.otp,
-            intent,
-          );
+          const isSignup = s.authIntent === 'signup';
+          const result = isSignup
+            ? await authApi.verifyRegistrationOtp(
+                s.phone,
+                normalizeEmail(s.email),
+                s.otp,
+              )
+            : await authApi.verifyOtp(
+                s.loginMethod,
+                s.loginMethod === 'email'
+                  ? normalizeEmail(s.email)
+                  : s.phone,
+                s.otp,
+              );
           if (!result.ok || !result.data) {
+            const suggest =
+              !isSignup &&
+              shouldSuggestEmailLogin(s.loginMethod, result.appCode);
             if (result.appCode === 'ACCOUNT_NOT_FOUND') {
-              p({loginNotFound: true, otpError: result.error || ''});
+              p({
+                loginNotFound: true,
+                otpError: result.error || '',
+                suggestEmailLogin: suggest,
+              });
             } else {
               p({
                 otpError: result.error || 'Incorrect code. Please try again.',
                 otp: '',
+                suggestEmailLogin: suggest,
               });
             }
-            return {ok: false, error: result.error};
+            return {
+              ok: false,
+              error: result.error,
+              appCode: result.appCode,
+            };
           }
+          // Only after successful OTP verify (email OTP for signup) may we proceed.
           const data = result.data;
+          // ACCOUNT_PENDING still returns a token + pending_review screen.
           const route = nextRouteFromScreen(data.nextScreen, data.user);
           const patch: Partial<RiderState> = {
             sessionReady: true,
@@ -550,7 +681,6 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
               if (profile.data.hub?.id) {
                 patch.epHubId = profile.data.hub.id;
               } else {
-                // Approved rider without a hub must pick one before going online.
                 p({...patch, epHubId: null});
                 return {ok: true, route: 'ObHub'};
               }
@@ -569,7 +699,7 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
           const message =
             err instanceof Error && err.message
               ? err.message
-              : 'Network unavailable.';
+              : 'Network error. Check your connection and try again.';
           p({otpError: message, otp: ''});
           return {ok: false, error: message};
         } finally {
@@ -610,39 +740,50 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
         }
       },
       goOffline: async () => {
-        const s = stateRef.current;
-        if (s.activeShiftId) {
-          const result = await riderApi.endShift(s.activeShiftId);
-          if (!result.ok) {
-            return {
-              ok: false,
-              error: result.error || 'Could not end shift. Try again.',
-            };
-          }
-        } else {
-          const result = await riderApi.goOffline();
-          if (!result.ok) {
-            return {
-              ok: false,
-              error: result.error || 'Could not go offline. Try again.',
-            };
-          }
+        // Backend ends any STARTED assignment, then clears presence.
+        const result = await riderApi.goOffline();
+        if (!result.ok) {
+          return {
+            ok: false,
+            error: result.error || 'Could not go offline. Try again.',
+          };
         }
         dispatch({type: 'TOGGLE_ONLINE_OFF'});
-        dispatch({type: 'PATCH', patch: {onlineSince: null}});
         return {ok: true};
       },
-      openShiftSheet: () =>
+      openShiftSheet: () => {
+        const s = stateRef.current;
+        const bookedFirst =
+          s.shifts.find(sl =>
+            s.booked[sl.id] !== undefined ? s.booked[sl.id] : sl.booked,
+          )?.id || null;
         p({
           shiftSheetOpen: true,
-          pickedShiftId:
-            stateRef.current.activeShiftId ||
-            stateRef.current.shifts[0]?.id ||
-            null,
-        }),
+          pickedShiftId: s.activeShiftId || bookedFirst || s.shifts[0]?.id || null,
+        });
+      },
       closeShiftSheet: () => p({shiftSheetOpen: false}),
       pickShift: id => p({pickedShiftId: id}),
-      startShift: () => dispatch({type: 'START_SHIFT'}),
+      startShift: result => {
+        const s = stateRef.current;
+        const shiftId =
+          result?.shiftId || s.pickedShiftId || s.activeShiftId || null;
+        const slot = shiftId
+          ? s.shifts.find(sl => sl.id === shiftId)
+          : undefined;
+        p({
+          isOnline: true,
+          activeShiftId: shiftId,
+          activeShiftTime:
+            result?.timeDisplay || slot?.time || s.activeShiftTime || null,
+          onlineSince:
+            result?.startedAt || s.onlineSince || new Date().toISOString(),
+          shiftSheetOpen: false,
+          ...(shiftId
+            ? {booked: {...s.booked, [shiftId]: true}}
+            : {}),
+        });
+      },
       toggleBooked: async id => {
         const s = stateRef.current;
         const currentlyBooked = isSlotBooked(s, id);

@@ -46,7 +46,14 @@ export const profileApi = {
   submitOnboarding(body?: {
     acceptedTermsVersion?: string;
     acceptedPrivacyVersion?: string;
-  }): Promise<ApiResult<unknown>> {
+  }): Promise<
+    ApiResult<{
+      applicationId?: string;
+      status?: 'under_review' | 'approved';
+      submittedAt?: string;
+      estimatedReviewHours?: number;
+    }>
+  > {
     return request('/picker/onboarding/submit', {
       method: 'POST',
       body: JSON.stringify(body ?? {}),
