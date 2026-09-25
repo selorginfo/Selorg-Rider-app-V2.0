@@ -1,0 +1,269 @@
+{
+  "at": "2026-09-25T05:46:55.110Z",
+  "collections": [
+    "riderv2orders",
+    "darkstoreriders",
+    "riderdigitkycsessions",
+    "customer_order_number_counters",
+    "rider_kits",
+    "rider_shifts",
+    "rider_applications",
+    "productionriders",
+    "rider_shift_assignments",
+    "rider_dashboard_notifications",
+    "picker_users",
+    "riders",
+    "customer_order_idempotency",
+    "riders_v2",
+    "riders_hr",
+    "customer_orders"
+  ],
+  "ridersCollectionCount": 0,
+  "ridersSample": [],
+  "riderStageCounts": [
+    {
+      "_id": "offered",
+      "n": 1
+    },
+    {
+      "_id": "picked_up",
+      "n": 1
+    }
+  ],
+  "recentOrders": [
+    {
+      "n": "ORD-20260924-00077",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T12:47:39.575Z"
+    },
+    {
+      "n": "ORD-20260924-00076",
+      "status": "getting-packed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T12:34:55.377Z"
+    },
+    {
+      "n": "ORD-20260924-00075",
+      "status": "pending",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-24T10:12:40.600Z"
+    },
+    {
+      "n": "ORD-20260924-00074",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T10:01:55.005Z"
+    },
+    {
+      "n": "ORD-20260924-00073",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T09:45:02.327Z"
+    },
+    {
+      "n": "ORD-20260924-00072",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T09:42:28.379Z"
+    },
+    {
+      "n": "ORD-20260924-00071",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T09:41:30.471Z"
+    },
+    {
+      "n": "ORD-20260924-00069",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T07:21:23.273Z"
+    },
+    {
+      "n": "ORD-20260924-00068",
+      "status": "pending",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-24T07:20:40.579Z"
+    },
+    {
+      "n": "ORD-20260924-00067",
+      "status": "cancelled",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T07:08:30.232Z"
+    },
+    {
+      "n": "ORD-20260924-00066",
+      "status": "cancelled",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-24T06:53:23.382Z"
+    },
+    {
+      "n": "ORD-20260924-00065",
+      "status": "cancelled",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-24T06:43:38.278Z"
+    },
+    {
+      "n": "ORD-20260924-00064",
+      "status": "cancelled",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-24T06:42:38.552Z"
+    },
+    {
+      "n": "ORD-20260924-00063",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T06:40:15.071Z"
+    },
+    {
+      "n": "ORD-20260924-00062",
+      "status": "pending",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-24T06:35:55.101Z"
+    },
+    {
+      "n": "ORD-20260924-00061",
+      "status": "confirmed",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-24T06:33:15.519Z"
+    },
+    {
+      "n": "ORD-20260924-00060",
+      "status": "pending",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-24T06:32:02.508Z"
+    },
+    {
+      "n": "ORD-20260923-00059",
+      "status": "on-the-way",
+      "stage": "picked_up",
+      "picker": "6ab2e23926e9522c72a20c21",
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-23T18:36:57.058Z"
+    },
+    {
+      "n": "ORD-20260923-00058",
+      "status": "cancelled",
+      "stage": null,
+      "picker": null,
+      "hub": null,
+      "type": "standard",
+      "created": "2026-09-23T09:09:59.169Z"
+    },
+    {
+      "n": "ORD-20260923-00057",
+      "status": "cancelled",
+      "stage": null,
+      "picker": null,
+      "hub": "DS-Adyar-01",
+      "type": "standard",
+      "created": "2026-09-23T06:59:22.275Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "6aaa78006d1b1c92cacfd432",
+      "phone": "9556735105",
+      "name": "Automation Picker",
+      "email": "automation.picker@selorg.com",
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": false,
+      "hub": "DS-Adyar-01",
+      "deliveryMode": "standard",
+      "vehicleType": "bike",
+      "activeOrderId": null
+    },
+    {
+      "id": "6aab8da169d29a948452e46c",
+      "phone": "9698790921",
+      "name": "Rider Flow Tester",
+      "email": null,
+      "status": "ACTIVE",
+      "workforceRole": "rider",
+      "isOnline": true,
+      "hub": "DS-Adyar-01",
+      "deliveryMode": "standard",
+      "vehicleType": null,
+      "activeOrderId": null
+    },
+    {
+      "id": "6aaa782f6d1b1c92cacfd4ae",
+      "phone": "9556782317",
+      "name": "Automation Picker",
+      "email": null,
+      "status": "ACTIVE",
+      "workforceRole": null,
+      "isOnline": true,
+      "hub": null,
+      "deliveryMode": "standard",
+      "vehicleType": null,
+      "activeOrderId": null
+    },
+    {
+      "id": "6ab2e23926e9522c72a20c21",
+      "phone": "8098098450",
+      "name": "hemanath Raider  2",
+      "email": "hemanaththala@gmail.com",
+      "status": "ACTIVE",
+      "workforceRole": "rider",
+      "isOnline": true,
+      "hub": "DS-Adyar-01",
+      "deliveryMode": "standard",
+      "vehicleType": "bike",
+      "activeOrderId": "6ab41c4952db45f960e433d2"
+    }
+  ]
+}

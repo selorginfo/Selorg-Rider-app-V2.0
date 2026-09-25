@@ -7,9 +7,9 @@
       "status": "ACTIVE",
       "workforceRole": null,
       "isOnline": false,
-      "hub": null,
-      "deliveryMode": null,
-      "vehicleType": null,
+      "hub": "DS-Adyar-01",
+      "deliveryMode": "standard",
+      "vehicleType": "bike",
       "onboardingCompleted": true
     },
     {
@@ -18,9 +18,9 @@
       "name": "Automation Picker",
       "status": "ACTIVE",
       "workforceRole": null,
-      "isOnline": false,
+      "isOnline": true,
       "hub": null,
-      "deliveryMode": null,
+      "deliveryMode": "standard",
       "vehicleType": null,
       "onboardingCompleted": true
     },
@@ -184,29 +184,76 @@
       "id": "6aab8da169d29a948452e46c",
       "phone": "9698790921",
       "name": "Rider Flow Tester",
-      "status": "under_review",
+      "status": "ACTIVE",
       "workforceRole": "rider",
-      "isOnline": false,
+      "isOnline": true,
       "hub": "DS-Adyar-01",
       "deliveryMode": "standard",
       "vehicleType": null,
       "onboardingCompleted": null
+    },
+    {
+      "id": "6ab2defe9e486b768688a4a4",
+      "phone": "1550688599",
+      "name": "Hemanath",
+      "status": "ACTIVE",
+      "workforceRole": "rider",
+      "isOnline": false,
+      "hub": "chennai-adyar-ds",
+      "deliveryMode": "standard",
+      "vehicleType": "bike",
+      "onboardingCompleted": null
+    },
+    {
+      "id": "6ab2e23926e9522c72a20c21",
+      "phone": "8098098450",
+      "name": "hemanath Raider  2",
+      "status": "ACTIVE",
+      "workforceRole": "rider",
+      "isOnline": true,
+      "hub": "DS-Adyar-01",
+      "deliveryMode": "standard",
+      "vehicleType": "bike",
+      "onboardingCompleted": null
+    },
+    {
+      "id": "6ab2e48826e9522c72a20c38",
+      "phone": "1258526427",
+      "name": "Hemanath Raider",
+      "status": "PENDING",
+      "workforceRole": "rider",
+      "isOnline": false,
+      "hub": null,
+      "deliveryMode": "standard",
+      "vehicleType": null,
+      "onboardingCompleted": null
+    },
+    {
+      "id": "6ab2e5dd26e9522c72a20c56",
+      "phone": "8668066236",
+      "name": "Hemanath Raider",
+      "status": "PENDING",
+      "workforceRole": "rider",
+      "isOnline": false,
+      "hub": "6aae5e3b88e1233ef7d75121",
+      "deliveryMode": "standard",
+      "vehicleType": "bike",
+      "onboardingCompleted": null
+    },
+    {
+      "id": "6ab399a1521ba9f8669201a2",
+      "phone": "8610447021",
+      "name": "ramesh",
+      "status": "ACTIVE",
+      "workforceRole": "rider",
+      "isOnline": false,
+      "hub": "DS-Adyar-01",
+      "deliveryMode": "standard",
+      "vehicleType": "bike",
+      "onboardingCompleted": null
     }
   ],
   "offered": [
-    {
-      "id": "6ab12e5f80c070ce45751c2e",
-      "orderNumber": "ORD-20260921-00042",
-      "status": "getting-packed",
-      "offerHubKey": "DS-Adyar-01",
-      "deliveryType": "standard",
-      "deliveryFee": 40,
-      "bagCode": "SG-100042-A",
-      "dispatchBay": "Rack-C4-Slot21",
-      "offerExpiresAt": null,
-      "itemCount": 2,
-      "seeded": false
-    },
     {
       "id": "6aab912fe32e4274ee67b4f1",
       "orderNumber": "rider-automation-seed-1789628719000",
@@ -247,6 +294,20 @@
       "id": "6aab8d9f92eba10c8a50fc0a",
       "key": "DS-Adyar-01",
       "name": "Adyar Darkstore",
+      "status": null,
+      "isActive": true
+    },
+    {
+      "id": "6ab3faa092eba10c8a51c71e",
+      "key": "6aaa936192eba10c8a50f241",
+      "name": "Chennai Central Dark Store",
+      "status": null,
+      "isActive": true
+    },
+    {
+      "id": "6ab3faa092eba10c8a51c71f",
+      "key": "6aae5e3b88e1233ef7d75121",
+      "name": "Adyar Store -1 ",
       "status": null,
       "isActive": true
     }
