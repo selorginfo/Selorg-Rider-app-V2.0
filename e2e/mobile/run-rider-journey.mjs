@@ -84,7 +84,7 @@ function record(row) {
 
 async function api(method, pathName, { token, body, auth = true } = {}) {
   const url = `${API}${pathName.startsWith("/") ? pathName : `/${pathName}`}`;
-  const headers = { Accept: "application/json" };
+  const headers = { Accept: "application/json", "x-selorg-client": "rider" };
   if (body !== undefined) headers["Content-Type"] = "application/json";
   if (auth && token) headers.Authorization = `Bearer ${token}`;
   try {
@@ -746,9 +746,11 @@ async function expireOtp(phone) {
   await mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 15000 });
   try {
     const raw = String(phone || "").trim();
-    const identifier = raw.includes("@") ? `email|${raw.toLowerCase()}` : raw.replace(/\D/g, "").slice(-10);
-    const r = await mongoose.connection.db.collection("picker_otps").updateOne(
-      { identifier },
+    const candidates = raw.includes("@")
+      ? [`rider|email|${raw.toLowerCase()}`, `email|${raw.toLowerCase()}`]
+      : [`rider|phone|${raw.replace(/\D/g, "").slice(-10)}`, raw.replace(/\D/g, "").slice(-10)];
+    const r = await mongoose.connection.db.collection("picker_otps").updateMany(
+      { identifier: { $in: candidates } },
       { $set: { expiresAt: new Date(Date.now() - 60_000), verified: false } },
     );
     return r.modifiedCount ? "ok" : "not-modified";

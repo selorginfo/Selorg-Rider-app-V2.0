@@ -52,35 +52,53 @@ async function withDb(work) {
   }
 }
 
-function otpIdentifier(target) {
+function otpIdentifier(target, { role = "rider", channel } = {}) {
   const raw = String(target || "").trim();
-  if (raw.includes("@")) return `email|${raw.toLowerCase()}`;
-  return raw.replace(/\D/g, "").slice(-10);
+  const r = role === "picker" ? "picker" : "rider";
+  if (raw.includes("@") || channel === "email") {
+    return `${r}|email|${raw.toLowerCase()}`;
+  }
+  const phone = raw.replace(/\D/g, "").slice(-10);
+  if (channel === "reg") return `${r}|reg|${phone}`;
+  return `${r}|phone|${phone}`;
 }
 
-export async function fetchRiderOtp(phone, { attempts = 6 } = {}) {
-  const identifier = otpIdentifier(phone);
+/** Legacy + role-scoped identifiers (backend moved to role|channel|value). */
+function otpIdentifierCandidates(target, { role = "rider" } = {}) {
+  const raw = String(target || "").trim();
+  const r = role === "picker" ? "picker" : "rider";
+  if (raw.includes("@")) {
+    const email = raw.toLowerCase();
+    return [`${r}|email|${email}`, `email|${email}`, email];
+  }
+  const phone = raw.replace(/\D/g, "").slice(-10);
+  return [`${r}|phone|${phone}`, phone, `${r}|reg|${phone}`];
+}
+
+export async function fetchRiderOtp(phone, { attempts = 6, role = "rider" } = {}) {
+  const candidates = otpIdentifierCandidates(phone, { role });
   let lastErr;
   for (let i = 0; i < attempts; i++) {
     try {
       if (i > 0) await sleep(700 * i);
       return await withDb(async (db) => {
         const doc = await db.collection("picker_otps").findOne(
-          { identifier, verified: { $ne: true } },
+          { identifier: { $in: candidates }, verified: { $ne: true } },
           { sort: { updatedAt: -1, createdAt: -1 } },
         );
-        if (!doc?.otp) throw new Error(`No unused OTP for ${identifier}`);
+        if (!doc?.otp) throw new Error(`No unused OTP for ${candidates[0]}`);
         return {
           otp: String(doc.otp),
           expiresAt: doc.expiresAt ? new Date(doc.expiresAt).toISOString() : null,
           attempts: doc.attempts ?? 0,
+          identifier: doc.identifier,
         };
       });
     } catch (e) {
       lastErr = e;
     }
   }
-  throw lastErr || new Error(`OTP fetch failed for ${otpIdentifier(phone)}`);
+  throw lastErr || new Error(`OTP fetch failed for ${candidates[0]}`);
 }
 
 export async function fetchOrderById(orderId) {
@@ -143,11 +161,11 @@ export async function fetchRiderUser(phone) {
   });
 }
 
-export async function resetOtpWindow(target) {
-  const identifier = otpIdentifier(target);
+export async function resetOtpWindow(target, { role = "rider" } = {}) {
+  const candidates = otpIdentifierCandidates(target, { role });
   return withDb(async (db) => {
-    await db.collection("picker_otps").deleteOne({ identifier });
-    return identifier;
+    await db.collection("picker_otps").deleteMany({ identifier: { $in: candidates } });
+    return candidates[0];
   });
 }
 

@@ -58,8 +58,8 @@ export function DepositSheet() {
       {state.depositStage === 'form' && (
         <>
           <SheetHeading
-            title="Deposit cash"
-            subtitle="Hand cash to your hub and record it here"
+            title="Transfer COD to company"
+            subtitle="Record the COD cash you transferred to Selorg (UPI / bank / cash at hub)"
           />
           <View style={styles.amountBox}>
             <AppText style={styles.rupee}>₹</AppText>
@@ -76,7 +76,7 @@ export function DepositSheet() {
           <View style={styles.amountRow}>
             <AppText style={styles.cashHint}>Cash in hand: ₹{cash}</AppText>
             <TextButton
-              label="Deposit full amount"
+              label="Transfer full amount"
               onPress={actions.depositAll}
               weight="700"
               size={12}
@@ -85,7 +85,7 @@ export function DepositSheet() {
           {!!state.depositError && (
             <AppText style={styles.error}>{state.depositError}</AppText>
           )}
-          <AppText style={styles.methodLabel}>DEPOSIT METHOD</AppText>
+          <AppText style={styles.methodLabel}>TRANSFER METHOD</AppText>
           <View style={styles.methods}>
             {PAY_METHODS.map(m => (
               <RadioRow
@@ -125,7 +125,7 @@ export function DepositSheet() {
           <PopIn style={styles.doneCheck}>
             <CheckIcon size={40} strokeWidth={3.6} />
           </PopIn>
-          <AppText style={styles.doneTitle}>Deposit recorded</AppText>
+          <AppText style={styles.doneTitle}>COD transfer recorded</AppText>
           <AppText style={styles.doneBody}>
             ₹{Number(state.depositedAmt || 0).toLocaleString('en-IN')} deposited
             via {state.depositMethodName}.{'\n'}A receipt has been sent to your

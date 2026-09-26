@@ -22,8 +22,9 @@ export function FloatCashScreen() {
   const [limitText, setLimitText] = useState(
     `Deposit limit: ₹${cfg.codDepositLimit.toLocaleString(
       'en-IN',
-    )} · Deposit before end of shift`,
+    )} · Transfer COD before end of shift`,
   );
+  const [mustTransfer, setMustTransfer] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -39,13 +40,20 @@ export function FloatCashScreen() {
         actions.patch({floatingCash: summary.data.cashInHand});
         const limit = summary.data.depositLimit;
         const due = summary.data.depositDueDisplay;
-        if (limit != null) {
+        const transferRequired = Boolean(summary.data.codTransferRequired);
+        if (transferRequired) {
+          setLimitText(
+            summary.data.transferMessage ||
+              `Transfer ₹${summary.data.cashInHand.toLocaleString('en-IN')} COD to the company before going online tomorrow`,
+          );
+        } else if (limit != null) {
           setLimitText(
             `Deposit limit: ₹${limit.toLocaleString('en-IN')}${
-              due ? ` · Due ${due}` : ' · Deposit before end of shift'
+              due ? ` · Due ${due}` : ' · Transfer COD before end of shift'
             }`,
           );
         }
+        setMustTransfer(transferRequired);
       } else if (!summary.ok) {
         setError(summary.error || 'Could not load cash summary');
       }
@@ -80,8 +88,17 @@ export function FloatCashScreen() {
         <AppText style={styles.limit}>{limitText}</AppText>
       </GradientHeroCard>
 
+      {mustTransfer ? (
+        <View style={styles.warnBanner}>
+          <AppText style={styles.warnText}>
+            Transfer this COD to the company to end your shift and to go online
+            tomorrow.
+          </AppText>
+        </View>
+      ) : null}
+
       <OutlineButton
-        label="Deposit cash to Selorg"
+        label={mustTransfer ? 'Transfer COD to company' : 'Deposit cash to Selorg'}
         onPress={actions.openDeposit}
         height={50}
         borderRadius={radius.md}
@@ -139,6 +156,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.onPrimarySoft,
     marginTop: 6,
+  },
+  warnBanner: {
+    marginTop: 12,
+    padding: 12,
+    borderRadius: radius.md,
+    backgroundColor: colors.warnBg,
+    borderWidth: 1,
+    borderColor: colors.warnBorder,
+  },
+  warnText: {
+    fontWeight: '600',
+    fontSize: 13,
+    color: colors.warnText,
+    textAlign: 'center',
   },
   depositBtn: {marginTop: 14},
   section: {

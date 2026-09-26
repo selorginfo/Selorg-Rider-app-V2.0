@@ -312,6 +312,10 @@ export interface CashSummaryDto {
   depositedToday?: number;
   pendingDeposits?: number;
   canGoOffline?: boolean;
+  canGoOnline?: boolean;
+  codTransferRequired?: boolean;
+  transferStatus?: 'clear' | 'pending_transfer' | 'blocked';
+  transferMessage?: string | null;
 }
 
 export interface CashTxnDto {

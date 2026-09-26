@@ -5,6 +5,7 @@ import {BottomSheet} from './BottomSheet';
 import {SheetHeading} from './SheetHeading';
 import {RadioDot} from '../inputs/RadioDot';
 import {PrimaryButton} from '../buttons/PrimaryButton';
+import {OutlineButton} from '../buttons/OutlineButton';
 import {useRider} from '../../store/RiderContext';
 import {isSlotBooked} from '../../store/selectors';
 import {riderApi} from '../../services/api/riderApi';
@@ -14,26 +15,54 @@ import {colors, radius} from '../../theme';
 /**
  * Home online toggle → pick a published shift, book if needed, then start.
  * Rider stays offline until Start Working succeeds against the backend.
+ * Undeposited COD from a prior shift blocks start until transferred.
  */
 export function ShiftSelectSheet() {
   const {state, actions} = useRider();
   const [loading, setLoading] = useState(false);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState('');
+  const [codBlocked, setCodBlocked] = useState(false);
+  const [codMessage, setCodMessage] = useState('');
+  const [cashInHand, setCashInHand] = useState(0);
 
   useEffect(() => {
     if (!state.shiftSheetOpen) {
       return;
     }
     setError('');
+    setCodBlocked(false);
+    setCodMessage('');
     let cancelled = false;
     (async () => {
       setLoading(true);
       try {
-        const [available, mine] = await Promise.all([
+        const [available, mine, cash] = await Promise.all([
           riderApi.getShifts(),
           riderApi.getMyShifts().catch(() => ({ok: false as const, data: null})),
+          riderApi.getCashSummary().catch(() => ({ok: false as const, data: null})),
         ]);
+
+        if (cash.ok && cash.data) {
+          const amount = cash.data.cashInHand ?? 0;
+          const blocked =
+            Boolean(cash.data.codTransferRequired) ||
+            cash.data.canGoOnline === false;
+          if (!cancelled) {
+            setCashInHand(amount);
+            actions.patch({floatingCash: amount});
+            if (blocked) {
+              setCodBlocked(true);
+              setCodMessage(
+                cash.data.transferMessage ||
+                  `Transfer your COD cash (₹${amount.toLocaleString(
+                    'en-IN',
+                  )}) to the company before going online.`,
+              );
+            }
+          }
+        }
+
         let shifts = available;
         if (mine.ok && mine.data) {
           const rows = Array.isArray(mine.data)
@@ -47,7 +76,11 @@ export function ShiftSelectSheet() {
                 if (!row || typeof row !== 'object') {
                   return '';
                 }
-                const r = row as {shiftId?: unknown; id?: unknown; _id?: unknown};
+                const r = row as {
+                  shiftId?: unknown;
+                  id?: unknown;
+                  _id?: unknown;
+                };
                 if (typeof r.shiftId === 'string') {
                   return r.shiftId;
                 }
@@ -99,6 +132,13 @@ export function ShiftSelectSheet() {
     if (!shiftId) {
       return;
     }
+    if (codBlocked) {
+      setError(
+        codMessage ||
+          'Transfer your COD cash to the company before starting your shift.',
+      );
+      return;
+    }
     setStarting(true);
     setError('');
     try {
@@ -126,6 +166,13 @@ export function ShiftSelectSheet() {
 
       const result = await riderApi.startShift(shiftId, location);
       if (!result.ok) {
+        if (
+          result.appCode === 'COD_TRANSFER_REQUIRED' ||
+          result.appCode === 'UNDEPOSITED_CASH'
+        ) {
+          setCodBlocked(true);
+          setCodMessage(result.error || '');
+        }
         setError(result.error || 'Could not start shift');
         return;
       }
@@ -133,14 +180,18 @@ export function ShiftSelectSheet() {
       actions.startShift({
         shiftId: result.data?.shiftId || shiftId,
         startedAt: result.data?.startedAt || new Date().toISOString(),
-        timeDisplay:
-          result.data?.shift?.timeDisplay || slot?.time || null,
+        timeDisplay: result.data?.shift?.timeDisplay || slot?.time || null,
       });
     } catch {
       setError('Could not start shift');
     } finally {
       setStarting(false);
     }
+  }
+
+  function openDeposit() {
+    actions.closeShiftSheet();
+    actions.openDeposit();
   }
 
   const noShifts = !loading && state.shifts.length === 0;
@@ -150,16 +201,44 @@ export function ShiftSelectSheet() {
       visible={state.shiftSheetOpen}
       onClose={actions.closeShiftSheet}>
       <SheetHeading
-        title="Select a shift to start"
+        title={codBlocked ? 'Transfer COD first' : 'Select a shift to start'}
         subtitle={
-          noShifts
-            ? 'No published shifts right now. Book a slot first, then try again.'
-            : "Pick the slot you're working now to go online"
+          codBlocked
+            ? codMessage ||
+              `You still hold ₹${cashInHand.toLocaleString(
+                'en-IN',
+              )} COD. Transfer it to the company to go online.`
+            : noShifts
+              ? 'No published shifts right now. Book a slot first, then try again.'
+              : "Pick the slot you're working now to go online"
         }
       />
       {loading ? (
         <View style={styles.loadingWrap}>
           <ActivityIndicator color={colors.primary} />
+        </View>
+      ) : codBlocked ? (
+        <View style={styles.blockCard}>
+          <AppText style={styles.blockAmt}>
+            ₹{cashInHand.toLocaleString('en-IN')}
+          </AppText>
+          <AppText style={styles.blockHint}>
+            COD cash still with you — transfer to company before starting
+          </AppText>
+          <PrimaryButton
+            label="Transfer COD now"
+            onPress={openDeposit}
+            height={52}
+            borderRadius={radius.lg}
+            style={styles.cta}
+          />
+          <OutlineButton
+            label="Close"
+            onPress={actions.closeShiftSheet}
+            height={48}
+            borderRadius={radius.lg}
+            style={styles.secondary}
+          />
         </View>
       ) : noShifts ? (
         <AppText style={styles.empty}>
@@ -191,15 +270,17 @@ export function ShiftSelectSheet() {
           })}
         </View>
       )}
-      {!!error && <AppText style={styles.error}>{error}</AppText>}
-      <PrimaryButton
-        label="Start Working"
-        onPress={handleStartWorking}
-        disabled={noShifts || !state.pickedShiftId || starting || loading}
-        height={52}
-        borderRadius={radius.lg}
-        style={styles.cta}
-      />
+      {!!error && !codBlocked && <AppText style={styles.error}>{error}</AppText>}
+      {!codBlocked ? (
+        <PrimaryButton
+          label="Start Working"
+          onPress={handleStartWorking}
+          disabled={noShifts || !state.pickedShiftId || starting || loading}
+          height={52}
+          borderRadius={radius.lg}
+          style={styles.cta}
+        />
+      ) : null}
     </BottomSheet>
   );
 }
@@ -233,4 +314,28 @@ const styles = StyleSheet.create({
   time: {fontWeight: '700', fontSize: 14, color: colors.ink},
   pay: {fontWeight: '400', fontSize: 11, color: colors.textFaint, marginTop: 2},
   cta: {marginTop: 18},
+  secondary: {marginTop: 10},
+  blockCard: {
+    marginTop: 16,
+    padding: 16,
+    borderRadius: radius.lg,
+    backgroundColor: colors.warnBg,
+    borderWidth: 1,
+    borderColor: colors.warnBorder,
+    alignItems: 'center',
+  },
+  blockAmt: {
+    fontWeight: '800',
+    fontSize: 28,
+    color: colors.ink,
+    letterSpacing: -0.5,
+  },
+  blockHint: {
+    fontWeight: '500',
+    fontSize: 13,
+    color: colors.warnText,
+    textAlign: 'center',
+    marginTop: 6,
+    marginBottom: 4,
+  },
 });

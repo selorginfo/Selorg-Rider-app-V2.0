@@ -19,9 +19,9 @@ import {colors, radius} from '../../theme';
 type ReviewPhase = 'under_review' | 'pending' | 'successful';
 
 const PHASE_LABEL: Record<ReviewPhase, string> = {
-  under_review: '● Under review',
-  pending: '● Pending',
-  successful: '● Successful',
+  under_review: '● Interview',
+  pending: '● Interview',
+  successful: '● Approved',
 };
 
 const POLL_MS = 4000;
@@ -149,16 +149,12 @@ export function PendingScreen() {
         <AppText style={styles.title}>
           {phase === 'successful'
             ? 'Application approved'
-            : phase === 'pending'
-              ? 'Application pending'
-              : 'Application under review'}
+            : 'Interview in progress'}
         </AppText>
         <AppText style={styles.copy}>
           {phase === 'successful'
             ? `You're approved, ${state.obName || state.epName || 'there'}. Taking you to the success screen.`
-            : phase === 'pending'
-              ? 'Documents are in final checks. This screen updates when a decision is ready.'
-              : `Thanks for signing up, ${state.obName || state.epName || 'there'}. Our team is verifying your documents and vehicle details.`}
+            : `Thanks for signing up, ${state.obName || state.epName || 'there'}. Your documents are with the operations team for interview review. You cannot access the app home until they approve.`}
         </AppText>
         <View style={styles.card}>
           <Row label="Application ID" value={applicationId} />

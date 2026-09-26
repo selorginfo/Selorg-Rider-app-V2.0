@@ -15,6 +15,7 @@ export function RejectedScreen() {
   const [reason, setReason] = useState(
     'We could not verify one or more documents. Please re-upload and resubmit.',
   );
+  const [docReasons, setDocReasons] = useState<string[]>([]);
 
   const signOut = useCallback(() => {
     void actions.logout();
@@ -29,8 +30,14 @@ export function RejectedScreen() {
       if (cancelled) {
         return;
       }
-      if (result.ok && result.data?.rejectionReason) {
-        setReason(result.data.rejectionReason);
+      if (result.ok && result.data) {
+        if (result.data.rejectionReason) {
+          setReason(result.data.rejectionReason);
+        }
+        const rejectedDocs = (result.data.documents || [])
+          .filter(d => String(d.status).toLowerCase() === 'rejected' && d.rejectionReason)
+          .map(d => `${String(d.type).toUpperCase()}: ${d.rejectionReason}`);
+        setDocReasons(rejectedDocs);
       }
     })();
     return () => {
@@ -50,12 +57,18 @@ export function RejectedScreen() {
         </View>
         <AppText style={styles.title}>Application needs changes</AppText>
         <AppText style={styles.copy}>
-          We couldn't verify one or more of your documents. Please re-upload
-          clear, valid copies and resubmit.
+          The operations lead rejected your interview documents. Fix the issues
+          below, re-upload clear copies, and resubmit. You will stay on the
+          Interview screen until approved.
         </AppText>
         <View style={styles.reasonCard}>
-          <AppText style={styles.reasonTitle}>Reason</AppText>
+          <AppText style={styles.reasonTitle}>Rejection reason</AppText>
           <AppText style={styles.reasonBody}>{reason}</AppText>
+          {docReasons.map(line => (
+            <AppText key={line} style={styles.docReason}>
+              • {line}
+            </AppText>
+          ))}
         </View>
       </View>
 
@@ -123,6 +136,13 @@ const styles = StyleSheet.create({
     color: colors.dangerTextDeep,
     marginTop: 3,
     lineHeight: 18,
+  },
+  docReason: {
+    fontWeight: '500',
+    fontSize: 11.5,
+    color: colors.dangerTextDeep,
+    marginTop: 6,
+    lineHeight: 16,
   },
   footer: {paddingHorizontal: 24, paddingBottom: 12},
 });

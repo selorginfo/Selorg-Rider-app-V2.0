@@ -135,7 +135,7 @@ interface RiderActions {
   verifyOtp(): Promise<{ok: boolean; error?: string; route?: string; appCode?: string}>;
 
   goOnline(): Promise<{ok: boolean; error?: string; appCode?: string}>;
-  goOffline(): Promise<{ok: boolean; error?: string}>;
+  goOffline(): Promise<{ok: boolean; error?: string; appCode?: string}>;
   openShiftSheet(): void;
   closeShiftSheet(): void;
   pickShift(id: string): void;
@@ -746,6 +746,7 @@ export function RiderProvider({children}: {children: React.ReactNode}) {
           return {
             ok: false,
             error: result.error || 'Could not go offline. Try again.',
+            appCode: result.appCode,
           };
         }
         dispatch({type: 'TOGGLE_ONLINE_OFF'});

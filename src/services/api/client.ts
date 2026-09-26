@@ -286,6 +286,12 @@ function friendlyMessage(status: number, msg?: string, appCode?: string, details
   if (appCode === 'ORDER_OUT_OF_RADIUS') {
     return 'This order is outside your 5 km delivery radius.';
   }
+  if (appCode === 'COD_TRANSFER_REQUIRED' || appCode === 'UNDEPOSITED_CASH') {
+    return (
+      msg ||
+      'Transfer your COD cash to the company before continuing.'
+    );
+  }
   if (status === 401) {
     return 'Session expired. Please sign in again.';
   }

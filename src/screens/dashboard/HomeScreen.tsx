@@ -71,6 +71,7 @@ export function HomeScreen() {
     if (!state.isOnline) {
       setOnlineError('');
       // Gate: rider must pick a shift before becoming available for work.
+      // Backend also blocks start when prior-day COD is undeposited.
       actions.openShiftSheet();
       return;
     }
@@ -79,6 +80,17 @@ export function HomeScreen() {
     const result = await actions.goOffline();
     setOnlineBusy(false);
     if (!result.ok) {
+      if (
+        result.appCode === 'UNDEPOSITED_CASH' ||
+        result.appCode === 'COD_TRANSFER_REQUIRED'
+      ) {
+        setOnlineError(
+          result.error ||
+            'Transfer your COD cash to the company before ending your shift.',
+        );
+        actions.openDeposit();
+        return;
+      }
       setOnlineError(result.error || 'Could not go offline. Try again.');
     }
   };
