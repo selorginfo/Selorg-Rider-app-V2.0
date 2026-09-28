@@ -78,21 +78,6 @@ export function EarningsScreen() {
         </View>
       </GradientHeroCard>
 
-      {!!w.nextPayoutSchedule && (
-        <Card style={styles.payoutCard}>
-          <View>
-            <AppText style={styles.payoutTitle}>Next payout</AppText>
-            <AppText style={styles.payoutSub}>{w.nextPayoutSchedule}</AppText>
-          </View>
-          <View style={styles.payoutRight}>
-            <AppText style={styles.payoutValue}>{w.nextPayout}</AppText>
-            {!!w.nextPayoutWhen && (
-              <AppText style={styles.payoutWhen}>{w.nextPayoutWhen}</AppText>
-            )}
-          </View>
-        </Card>
-      )}
-
       <AppText style={styles.section}>Earnings breakdown</AppText>
       {w.breakdown.length === 0 ? (
         <Card style={styles.emptyCard}>
@@ -224,19 +209,6 @@ const styles = StyleSheet.create({
     color: colors.onPrimarySoft,
     minWidth: 0,
   },
-  payoutCard: {
-    marginTop: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    gap: 12,
-  },
-  payoutTitle: {fontWeight: '700', fontSize: 14, color: colors.ink},
-  payoutSub: {fontWeight: '400', fontSize: 12, color: colors.textMuted},
-  payoutRight: {alignItems: 'flex-end', minWidth: 0, flexShrink: 0},
-  payoutValue: {fontWeight: '800', fontSize: 18, color: colors.primary},
-  payoutWhen: {fontWeight: '400', fontSize: 11, color: colors.textMuted},
   section: {
     fontWeight: '700',
     fontSize: 15,

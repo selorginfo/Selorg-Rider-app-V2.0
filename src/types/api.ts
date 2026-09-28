@@ -78,7 +78,6 @@ export interface DashboardTodayDto {
   ordersDelivered?: number;
   onlineHours?: number;
   slotsCompleted?: number;
-  earnings?: number;
   availableOrdersCount?: number;
   activeOrderId?: string | null;
   activeBatchId?: string | null;
@@ -267,11 +266,6 @@ export interface EarningsBreakdownDto {
     amount: number;
     amountDisplay?: string;
   }>;
-  nextPayout?: {
-    amount?: number;
-    dueAt?: string;
-    scheduleDisplay?: string;
-  };
 }
 
 export interface EarningsHistoryDayDto {

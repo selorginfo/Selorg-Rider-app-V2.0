@@ -350,7 +350,7 @@ export function ProfileScreen() {
           icon: 'wallet',
           bg: colors.primaryTint,
           label: 'Wallet',
-          sub: 'Balance and payouts',
+          sub: 'Balance and transactions',
           route: 'Wallet',
         },
       ],

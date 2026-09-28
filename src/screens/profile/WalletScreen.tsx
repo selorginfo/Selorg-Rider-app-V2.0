@@ -74,7 +74,7 @@ export function WalletScreen() {
               {formatAmt(wallet?.availableBalance)}
             </AppText>
             <AppText style={styles.limit}>
-              {wallet?.currency || 'INR'} · payouts land here
+              {wallet?.currency || 'INR'} · earnings land here
             </AppText>
           </GradientHeroCard>
           <View style={styles.tiles}>

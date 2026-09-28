@@ -7,11 +7,8 @@ import {ContentColumn} from '../../components/common/ContentColumn';
 import {
   BoxIcon,
   ClockMiniIcon,
-  BoxSmallIcon,
-  ClockSmallIcon,
   CalendarSmallIcon,
 } from '../../components/common/Icons';
-import {StatCard} from '../../components/cards/StatCard';
 import {GradientView} from '../../components/common/GradientView';
 import {ProgressBar} from '../../components/feedback/ProgressBar';
 import {ToggleSwitch} from '../../components/inputs/ToggleSwitch';
@@ -32,20 +29,6 @@ function firstName(full: string): string {
   return n || 'Rider';
 }
 
-function fmtCod(v?: number): string {
-  if (v == null) {
-    return '—';
-  }
-  return `₹${v.toLocaleString('en-IN')}`;
-}
-
-function fmtStat(v?: number, fallback = '—'): string {
-  if (v == null) {
-    return fallback;
-  }
-  return String(v);
-}
-
 export function HomeScreen() {
   const nav = useAppNavigation();
   const {state, actions} = useRider();
@@ -60,7 +43,6 @@ export function HomeScreen() {
   const [dashboard, setDashboard] = useState<DashboardTodayDto | null>(null);
   const [incentive, setIncentive] = useState<IncentiveTodayDto | null>(null);
   const [homeError, setHomeError] = useState('');
-  const [homeLoading, setHomeLoading] = useState(true);
   const [onlineBusy, setOnlineBusy] = useState(false);
   const [onlineError, setOnlineError] = useState('');
 
@@ -84,7 +66,6 @@ export function HomeScreen() {
   };
 
   const loadHome = useCallback(async () => {
-    setHomeLoading(true);
     setHomeError('');
     try {
       const [dashRes, profileRes, shifts, incentiveRes, myShiftsRes] =
@@ -235,8 +216,6 @@ export function HomeScreen() {
       actions.patch(patch);
     } catch {
       setHomeError('Could not load dashboard');
-    } finally {
-      setHomeLoading(false);
     }
   }, [actions, isBulk]);
 
@@ -331,54 +310,13 @@ export function HomeScreen() {
           </AppText>
         </Pressable>
       )}
-
-      {/* performance */}
-      <View style={styles.section}>
-        <View style={styles.sectionHead}>
-          <AppText style={styles.sectionTitle}>Today's Performance</AppText>
-          <Pressable onPress={() => nav.navigate('Main', {screen: 'Earnings'})}>
-            <AppText style={styles.link}>View Details ›</AppText>
-          </Pressable>
-        </View>
-        {!!homeError && (
-          <Pressable onPress={() => void loadHome()}>
-            <AppText style={styles.link}>{homeError} · Retry</AppText>
-          </Pressable>
-        )}
-        {homeLoading && !dashboard ? (
-          <AppText style={styles.link}>Loading today's stats…</AppText>
-        ) : null}
-        <View style={styles.grid}>
-          <StatCard
-            style={styles.gridItem}
-            iconBg={colors.primaryTint}
-            icon={<AppText style={styles.rupeeIcon}>₹</AppText>}
-            value={fmtCod(dashboard?.codCollected)}
-            label="COD Collected"
-          />
-          <StatCard
-            style={styles.gridItem}
-            iconBg={colors.infoBg}
-            icon={<BoxSmallIcon />}
-            value={fmtStat(dashboard?.ordersDelivered, '0')}
-            label="Orders Delivered"
-          />
-          <StatCard
-            style={styles.gridItem}
-            iconBg={colors.purpleChipBg}
-            icon={<ClockSmallIcon />}
-            value={fmtStat(dashboard?.onlineHours, '0')}
-            label="Online Hours"
-          />
-          <StatCard
-            style={styles.gridItem}
-            iconBg={colors.warnBg}
-            icon={<CalendarSmallIcon />}
-            value={fmtStat(dashboard?.slotsCompleted, '0')}
-            label="Slots Completed"
-          />
-        </View>
-      </View>
+      {!!homeError && (
+        <Pressable
+          onPress={() => void loadHome()}
+          style={styles.onlineErrorWrap}>
+          <AppText style={styles.onlineError}>{homeError} · Retry</AppText>
+        </Pressable>
+      )}
 
       {/* incentive */}
       <GradientView
@@ -668,24 +606,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  section: {gap: 12},
-  sectionHead: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 8,
-  },
-  sectionTitle: {
-    fontWeight: '700',
-    fontSize: 15,
-    color: colors.ink,
-    flex: 1,
-    minWidth: 0,
-  },
   link: {fontWeight: '600', fontSize: 12, color: colors.primary},
-  grid: {flexDirection: 'row', flexWrap: 'wrap', gap: 11},
-  gridItem: {flexGrow: 1, flexBasis: '48%', minWidth: 140},
-  rupeeIcon: {fontWeight: '800', fontSize: 15, color: colors.primary},
 
   incentive: {borderRadius: radius.lg, padding: 20, ...shadow('lg')},
   incentiveTop: {

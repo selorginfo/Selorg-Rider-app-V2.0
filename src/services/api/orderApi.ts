@@ -288,9 +288,9 @@ export const orderApi: OrderApi = {
       return mockOk({
         id: orderId,
         status: 'cancelled',
-        riderStage: 'cancelled',
+        riderStage: 'offered',
         updatedAt: new Date().toISOString(),
-        cancellation: {reason, note, reassigned: false},
+        cancellation: {reason, note, reassigned: true},
       });
     }
     return request<OrderStatusUpdateDto>(

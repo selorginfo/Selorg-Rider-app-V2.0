@@ -50,9 +50,6 @@ export interface EarningsSummary {
   hours: string;
   avgPerOrder: string;
   breakdown: Array<{label: string; amount: string; purple?: boolean}>;
-  nextPayout: string;
-  nextPayoutWhen: string;
-  nextPayoutSchedule: string;
 }
 
 export interface RiderApi {
@@ -213,17 +210,6 @@ export const riderApi: RiderApi = {
         amount: b.amountDisplay ?? `₹${b.amount}`,
         purple: b.key === 'bulk' || /bulk/i.test(b.label),
       })),
-      nextPayout:
-        d.nextPayout?.amount != null
-          ? `₹${d.nextPayout.amount}`
-          : d.totalDisplay ?? `₹${d.total ?? 0}`,
-      nextPayoutWhen: d.nextPayout?.dueAt
-        ? new Date(d.nextPayout.dueAt).toLocaleDateString('en-IN', {
-            day: 'numeric',
-            month: 'short',
-          })
-        : '',
-      nextPayoutSchedule: d.nextPayout?.scheduleDisplay ?? 'Weekly payout',
     };
   },
 

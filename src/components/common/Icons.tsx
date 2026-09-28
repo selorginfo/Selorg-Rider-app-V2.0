@@ -159,32 +159,6 @@ export const CalendarIcon = ({size = 20, color = colors.slate}: IconProps) => (
   </Svg>
 );
 
-export const BoxSmallIcon = ({size = 17, color = colors.info}: IconProps) => (
-  <Svg width={size} height={size} viewBox="0 0 20 20" fill="none">
-    <Path
-      d="M3 6.5 10 3l7 3.5v7L10 17l-7-3.5v-7Z"
-      stroke={color}
-      strokeWidth={1.5}
-      strokeLinejoin="round"
-    />
-  </Svg>
-);
-
-export const ClockSmallIcon = ({
-  size = 17,
-  color = colors.purpleIcon,
-}: IconProps) => (
-  <Svg width={size} height={size} viewBox="0 0 20 20" fill="none">
-    <Circle cx={10} cy={10} r={7.5} stroke={color} strokeWidth={1.5} />
-    <Path
-      d="M10 5.5V10l3 1.8"
-      stroke={color}
-      strokeWidth={1.5}
-      strokeLinecap="round"
-    />
-  </Svg>
-);
-
 export const CalendarSmallIcon = ({
   size = 17,
   color = colors.amber,

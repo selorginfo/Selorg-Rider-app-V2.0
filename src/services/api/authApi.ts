@@ -8,6 +8,8 @@ import {
 } from './client';
 import {storageService, STORAGE_KEYS} from '../storage/storageService';
 
+const RIDER_ROLE = 'rider' as const;
+
 function isEmail(target: string): boolean {
   return target.includes('@');
 }
@@ -116,7 +118,11 @@ export const authApi: AuthApi = {
       method === 'email' || isEmail(normalized) ? 'email' : 'phone';
     return request<CheckAccountData>('/picker/auth/check-account', {
       method: 'POST',
-      body: JSON.stringify({loginType, value: normalized}),
+      body: JSON.stringify({
+        loginType,
+        value: normalized,
+        workforceRole: RIDER_ROLE,
+      }),
       skipAuth: true,
     });
   },
@@ -127,6 +133,7 @@ export const authApi: AuthApi = {
       body: JSON.stringify({
         phone: phone.replace(/\D/g, '').slice(-10),
         email: email.trim().toLowerCase(),
+        workforceRole: RIDER_ROLE,
       }),
       skipAuth: true,
     });
@@ -138,7 +145,11 @@ export const authApi: AuthApi = {
       method === 'email' || isEmail(normalized)
         ? await request<SendOtpData>('/picker/auth/send-otp-email', {
             method: 'POST',
-            body: JSON.stringify({email: normalized, purpose: 'LOGIN'}),
+            body: JSON.stringify({
+              email: normalized,
+              purpose: 'LOGIN',
+              workforceRole: RIDER_ROLE,
+            }),
             skipAuth: true,
           })
         : await request<SendOtpData>('/picker/auth/send-otp', {
@@ -147,6 +158,7 @@ export const authApi: AuthApi = {
               phone: normalized,
               preferredChannel: method === 'whatsapp' ? 'whatsapp' : 'sms',
               purpose: 'LOGIN',
+              workforceRole: RIDER_ROLE,
             }),
             skipAuth: true,
           });
@@ -159,7 +171,11 @@ export const authApi: AuthApi = {
       method === 'email' || isEmail(normalized)
         ? await request<SendOtpData>('/picker/auth/resend-otp-email', {
             method: 'POST',
-            body: JSON.stringify({email: normalized, purpose: 'LOGIN'}),
+            body: JSON.stringify({
+              email: normalized,
+              purpose: 'LOGIN',
+              workforceRole: RIDER_ROLE,
+            }),
             skipAuth: true,
           })
         : await request<SendOtpData>('/picker/auth/resend-otp', {
@@ -168,6 +184,7 @@ export const authApi: AuthApi = {
               phone: normalized,
               preferredChannel: method === 'whatsapp' ? 'whatsapp' : 'sms',
               purpose: 'LOGIN',
+              workforceRole: RIDER_ROLE,
             }),
             skipAuth: true,
           });
@@ -182,6 +199,7 @@ export const authApi: AuthApi = {
         body: JSON.stringify({
           phone: phone.replace(/\D/g, '').slice(-10),
           email: email.trim().toLowerCase(),
+          workforceRole: RIDER_ROLE,
         }),
         skipAuth: true,
       },
@@ -197,6 +215,7 @@ export const authApi: AuthApi = {
         body: JSON.stringify({
           phone: phone.replace(/\D/g, '').slice(-10),
           email: email.trim().toLowerCase(),
+          workforceRole: RIDER_ROLE,
         }),
         skipAuth: true,
       },
@@ -212,6 +231,7 @@ export const authApi: AuthApi = {
             otp,
             purpose: 'LOGIN',
             intent: 'login',
+            workforceRole: RIDER_ROLE,
           }
         : {
             phone: normalizeTarget(method, target),
@@ -219,6 +239,7 @@ export const authApi: AuthApi = {
             preferredChannel: method === 'whatsapp' ? 'whatsapp' : 'sms',
             purpose: 'LOGIN',
             intent: 'login',
+            workforceRole: RIDER_ROLE,
           };
 
     const path =
@@ -265,7 +286,7 @@ export const authApi: AuthApi = {
           phone: phone.replace(/\D/g, '').slice(-10),
           email: email.trim().toLowerCase(),
           otp,
-          workforceRole: 'rider',
+          workforceRole: RIDER_ROLE,
         }),
         skipAuth: true,
       },
